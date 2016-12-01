@@ -7,12 +7,11 @@ import autopilot from '../../models/autopilot.js'
 // import { addJitterToMoves, stationaryUpdates, updateXcodeLocation } from '../../models/settings.js'
 
 const shortcuts = [
-  [ 'Home', {lat: 37.749132, long: -122.428023}],
+  [ 'Base', {lat: 37.749272, long: -122.427651}],
   [ 'Pier 39', {lat: 37.811159, long: -122.410799}],
   [ 'Wharf', {lat: 37.810890, long: -122.418927}],
   [ 'Ferry Building', {lat: 37.795349, long: -122.392167}],
-  [ 'Union Square', {lat: 37.788355, long: -122.406944}],
-  [ 'Charmander Park', {lat: 37.70927654, long: -122.088655}]
+  [ 'Union Square', {lat: 37.788355, long: -122.406944}]
 ]
 
 const Shortcuts = observer(() =>
