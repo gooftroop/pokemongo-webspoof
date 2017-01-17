@@ -14,6 +14,8 @@ const shortcuts = [
   [ 'Union Square', {lat: 37.788355, long: -122.406944}]
 ]
 
+// TODO: add randomization to destinations
+
 const Shortcuts = observer(() =>
   <div className="shortcuts">
     { shortcuts.map(([ location, coords ], idx) =>
@@ -37,3 +39,5 @@ const Shortcuts = observer(() =>
 
 export default Shortcuts
           
+// 1 foot to degree
+// 0.000002742696154

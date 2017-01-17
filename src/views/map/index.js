@@ -32,7 +32,8 @@ class Map extends Component {
 
   @observable mapOptions = {
     keyboardShortcuts: false,
-    draggable: true
+    draggable: true,
+    disableDoubleClickZoom: true
   }
 
   componentWillMount() {
@@ -76,9 +77,34 @@ class Map extends Component {
     this.map.map_.setOptions(toJS(this.mapOptions))
   }
 
-  @action handleClick = ({x, y, lat, lng, force}) => {
-    if (!this.mapOptions.draggable || force) {
+  clicks = 0
+  timer = null
+  handleSingleClick = (lat, lng, shiftdown) => {
+    console.log('single click', arguments)
+    
+    // TODO: remove not draggable
+    if (!this.mapOptions.draggable || shiftdown) {
       this.autopilot.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } })
+    }
+  }
+
+  handleDoubleClick = (lat, lng, shiftdown) => {
+    console.log('double click', arguments)
+    this.autopilot.handleDestinationRequest({ destination: { latlng: { lat, lng } } })
+  }
+
+  @action handleClick = ({lat, lng, shiftdown}) => {
+    this.clicks++
+
+    if (this.clicks === 1) {
+      setTimeout(function() {
+        if (this.clicks === 1) {
+          this.handleSingleClick.call(this, lat, lng, shiftdown)
+        } else {
+          this.handleDoubleClick.call(this, lat, lng, shiftdown)
+        }
+        this.clicks = 0;
+      }.bind(this), 300);
     }
   }
 
@@ -97,7 +123,7 @@ class Map extends Component {
                 this.handleClick({
                   lat: result.lat,
                   lng: result.lng,
-                  force: result.event.shiftKey})
+                  shiftdown: result.event.shiftKey})
               }
             }
             options={ () => this.mapOptions }
