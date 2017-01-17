@@ -7,15 +7,6 @@ import userLocation from './user-location.js'
 
 class Autopilot {
 
-  const travelModes = [
-    [ 'walk', 9, 'blind' ],
-    [ 'cycling', 13, 'bicycle' ], // Credit to https://github.com/DJLectr0
-    [ 'subway', 50, 'subway' ],
-    [ 'truck', 80, 'truck' ],
-    [ 'car', 120, 'car' ],
-    [ 'teleport', '~', 'star' ]
-  ]
-
   timeout = null // inner setTimout to move next location
 
   @observable paused = false

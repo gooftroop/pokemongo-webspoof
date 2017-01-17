@@ -8,7 +8,14 @@ import cx from 'classnames'
 
 import autopilot from '../../models/autopilot.js'
 
-const travelModes = autopilot.travelModes;
+const travelModes = [
+  [ 'walk', 9, 'blind' ],
+  [ 'cycling', 13, 'bicycle' ], // Credit to https://github.com/DJLectr0
+  [ 'subway', 50, 'subway' ],
+  [ 'truck', 80, 'truck' ],
+  [ 'car', 120, 'car' ],
+  [ 'teleport', '~', 'star' ]
+]
 
 @observer
 class Autopilot extends Component {
@@ -53,7 +60,12 @@ class Autopilot extends Component {
 
   @action handleDestinationRequest = ({ destination: { latlng: { lat, lng } } }) => {
     autopilot.stop()
-    
+
+    // TODO: refactor
+    var travelmode = travelModes[1];
+    autopilot.speed = travelmode[1] / 3600
+    this.travelMode = travelmode[0]
+
     autopilot.scheduleTrip(lat, lng)
       .then(() => { 
         autopilot.steps = JSON.parse(JSON.stringify(autopilot.accurateSteps))

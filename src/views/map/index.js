@@ -72,11 +72,6 @@ class Map extends Component {
     userLocation.replace([ latitude, longitude ])
   }
 
-  @action toggleMapDrag = () => {
-    this.mapOptions.draggable = !this.mapOptions.draggable
-    this.map.map_.setOptions(toJS(this.mapOptions))
-  }
-
   clicks = 0
   timer = null
   handleSingleClick = (lat, lng, shiftdown) => {
@@ -145,20 +140,6 @@ class Map extends Component {
               className='fa fa-spin fa-2x fa-refresh' />
             <div>Loading user location & map...</div>
           </div> }
-
-        <div className='btn btn-drag-map'>
-          { this.mapOptions.draggable ?
-            <div
-              className='btn btn-sm btn-primary'
-              onClick={ this.toggleMapDrag }>
-              Map draggable
-            </div> :
-            <div
-              className='btn btn-sm btn-secondary'
-              onClick={ this.toggleMapDrag }>
-              Map locked
-            </div> }
-        </div>
 
         { /* controls, settings displayed on top of the map */ }
         <Coordinates />
