@@ -75,12 +75,8 @@ class Map extends Component {
   clicks = 0
   timer = null
   handleSingleClick = (lat, lng, shiftdown) => {
-    console.log('single click', arguments)
-    
-    // TODO: remove not draggable
-    if (!this.mapOptions.draggable || shiftdown) {
-      this.autopilot.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } })
-    }
+    console.log('single click', arguments)    
+    this.autopilot.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } })
   }
 
   handleDoubleClick = (lat, lng, shiftdown) => {
