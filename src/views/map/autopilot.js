@@ -147,7 +147,7 @@ class Autopilot extends Component {
             { travelModes.map(([ name, speed, icon ]) =>
               <div
                 key={ name }
-                className={ `col-xs-4 text-center ${name}` }
+                className={ `col-sm-4 text-center ${name}` }
                 onClick={ this.handleSelectTravelMode(name, speed) }>
                 <div className={ cx('card travel-mode', { selected: name === this.travelMode }) }>
                   <div className='card-block'>
@@ -167,21 +167,21 @@ class Autopilot extends Component {
           { (autopilot.accurateSteps.length !== 0) ?
 
             <div className='infos row'>
-              <div className='col-xs-4 text-center'>
+              <div className='col-sm-4 text-center'>
                 <strong>Distance: </strong>
                 <span className='tag tag-info'>
                   { autopilot.distance.toFixed(2) } km
                 </span>
               </div>
 
-              <div className='col-xs-4 text-center'>
+              <div className='col-sm-4 text-center'>
                 <strong>Speed: </strong>
                 <span className='tag tag-info'>
                   { this.speed } km/h
                 </span>
               </div>
 
-              <div className='col-xs-4 text-center'>
+              <div className='col-sm-4 text-center'>
                 <strong>Time: </strong>
                 <span className='tag tag-info'>
                   { autopilot.time }
