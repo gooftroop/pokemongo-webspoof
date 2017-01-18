@@ -14,6 +14,9 @@ import autopilot from '../../models/autopilot.js'
 const lastMoveDirection = observable(null)
 
 const handleMove = action((direction) => {
+  console.log('handle move')
+  autopilot.pause()
+
   const speedCoeff = settings.speedLimit.get()
   const move = (direction === 'UP' || direction === 'DOWN') ?
     random(0.0000300, 0.000070, true) / speedCoeff :
@@ -21,11 +24,11 @@ const handleMove = action((direction) => {
 
   let newLocation
   switch (direction) {
-  case 'LEFT': { newLocation = [ userLocation[0], userLocation[1] - move ]; break }
-  case 'RIGHT': { newLocation = [ userLocation[0], userLocation[1] + move ]; break }
-  case 'DOWN': { newLocation = [ userLocation[0] - move, userLocation[1] ]; break }
-  case 'UP': { newLocation = [ userLocation[0] + move, userLocation[1] ]; break }
-  default: { newLocation = [ userLocation[0], userLocation[1] ] }
+    case 'LEFT': { newLocation = [ userLocation[0], userLocation[1] - move ]; break }
+    case 'RIGHT': { newLocation = [ userLocation[0], userLocation[1] + move ]; break }
+    case 'DOWN': { newLocation = [ userLocation[0] - move, userLocation[1] ]; break }
+    case 'UP': { newLocation = [ userLocation[0] + move, userLocation[1] ]; break }
+    default: { newLocation = [ userLocation[0], userLocation[1] ] }
   }
 
   userLocation.replace(newLocation)

@@ -16,6 +16,8 @@ const userLocation = observable([ 0, 0 ])
 
 const isValidLocation = /^([-+]?\d{1,2}([.]\d+)?),\s*([-+]?\d{1,3}([.]\d+)?)$/
 
+
+//
 const validateCoordinates = ((change) => {
   // check that we have valid coordinates before update
   if (change.type === 'splice') {
@@ -36,11 +38,14 @@ const validateCoordinates = ((change) => {
   return change
 })
 
+
+//
 const updateXcodeLocation = throttle(([ lat, lng ]) => {
+  console.log('update xcode locations')
   // track location changes for total distance & average speed
   stats.pushMove(lat, lng)
 
-  const jitter = settings.addJitterToMoves.get() ? random(-0.000009, 0.000009, true) : 0
+  const jitter = settings.addJitterToMoves.get() ? random(-0.000025, 0.000025, true) : 0
 
   const xcodeLocationData =
     `<gpx creator="Xcode" version="1.1"><wpt lat="${(lat + jitter).toFixed(6)}" lon="${(lng + jitter).toFixed(6)}"><name>PokemonLocation</name></wpt></gpx>`
@@ -75,10 +80,14 @@ const updateXcodeLocation = throttle(([ lat, lng ]) => {
   })
 }, 1000)
 
+
+//
 userLocation.intercept(validateCoordinates)
+
 
 // after update
 userLocation.observe(() => updateXcodeLocation(userLocation))
+
 
 // updated at random intervals to prevent reversion
 let currentTimer = null
@@ -104,8 +113,10 @@ function scheduleUpdate() {
   }, randomWait)
 }
 
+
 // watch settings for updates
 settings.stationaryUpdates.observe(() => scheduleUpdate())
+
 
 // initial trigger
 scheduleUpdate()

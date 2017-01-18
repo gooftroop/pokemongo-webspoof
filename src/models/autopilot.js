@@ -7,7 +7,7 @@ import userLocation from './user-location.js'
 
 class Autopilot {
 
-  timeout = null // inner setTimout to move next location
+  steptimer = null // inner setTimout to move next location
 
   @observable paused = false
   @observable running = false // is the autopilot running
@@ -46,6 +46,8 @@ class Autopilot {
     }
   }
 
+
+    
   findDirectionPath = (lat, lng) => new Promise((resolve, reject) => {
     const { google: { maps } } = window
     this.destination = { lat, lng }
@@ -147,7 +149,7 @@ class Autopilot {
 
         // move on to the next location
         if (this.steps.length !== 0) {
-          this.timeout = setTimeout(moveNextPoint, 1000)
+          this.steptimer = setTimeout(moveNextPoint, 1000)
         } else {
           Alert.success(`
             <strong>Alert</strong>
@@ -164,17 +166,36 @@ class Autopilot {
     moveNextPoint()
   }
 
+  @action resume = async () => {
+    try {
+      const foundPath = await this.findDirectionPath(this.destination.lat, this.destination.lng)
+      const { distance } = this.calculateIntermediateSteps(foundPath)
+
+      this.distance = distance
+
+      this.steps = JSON.parse(JSON.stringify(this.accurateSteps))
+      this.start()
+    } catch (error) {
+      Alert.error(`
+        <strong>Error with schedule trip</strong>
+        <div class='stack'>${error}</div>
+      `)
+
+      throw error
+    }
+  }
+
   @action pause = () => {
-    clearTimeout(this.timeout)
-    this.timeout = null
+    clearTimeout(this.steptimer)
+    this.steptimer = null
     this.running = false
     this.paused = true
   }
 
   // reset all store state
   @action stop = () => {
-    clearTimeout(this.timeout)
-    this.timeout = null
+    clearTimeout(this.steptimer)
+    this.steptimer = null
     this.paused = false
     this.running = false
     this.distance = 0

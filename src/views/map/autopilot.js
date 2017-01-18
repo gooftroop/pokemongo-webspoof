@@ -52,7 +52,7 @@ class Autopilot extends Component {
         if (autopilot.running && !autopilot.paused) {
           autopilot.pause()
         } else if (autopilot.paused) {
-          autopilot.start()
+          autopilot.resume()
         }
       }
     })
@@ -68,6 +68,7 @@ class Autopilot extends Component {
 
     autopilot.scheduleTrip(lat, lng)
       .then(() => { 
+        // TODO:
         autopilot.steps = JSON.parse(JSON.stringify(autopilot.accurateSteps))
         autopilot.start()
       })
