@@ -8,6 +8,7 @@ import cx from 'classnames'
 
 import autopilot from '../../models/autopilot.js'
 
+// TODO: encapsulate in autopilot model
 const travelModes = [
   [ 'walk', 9, 'blind' ],
   [ 'cycling', 13, 'bicycle' ], // Credit to https://github.com/DJLectr0
@@ -21,7 +22,7 @@ const travelModes = [
 class Autopilot extends Component {
 
   @observable isModalOpen = false
-  @observable travelMode = 'walk'
+  @observable travelMode = 'cycling'
 
   @computed get speed() {
     const [ , speed ] = travelModes.find(([ t ]) => t === this.travelMode)
@@ -61,10 +62,10 @@ class Autopilot extends Component {
   @action handleDestinationRequest = ({ destination: { latlng: { lat, lng } } }) => {
     autopilot.stop()
 
-    // TODO: refactor
-    var travelmode = travelModes[1];
-    autopilot.speed = travelmode[1] / 3600
-    this.travelMode = travelmode[0]
+    // TODO: currently we assume whatever speed is set
+    // var travelmode = travelModes[1];
+    // autopilot.speed = travelmode[1] / 3600
+    // this.travelMode = travelmode[0]
 
     autopilot.scheduleTrip(lat, lng)
       .then(() => { 
