@@ -40,12 +40,44 @@ const validateCoordinates = ((change) => {
 
 
 //
+let rnormv2 = null
+const getRandom = (mean, stdev) => {
+  var u1, u2, v1, v2, s;
+  if (mean === undefined) {
+    mean = 0.0;
+  }
+
+  if (stdev === undefined) {
+    stdev = 1.0;
+  }
+
+  if (rnormv2 === null) {
+    do {
+      u1 = Math.random();
+      u2 = Math.random();
+
+      v1 = 2 * u1 - 1;
+      v2 = 2 * u2 - 1;
+      s = v1 * v1 + v2 * v2;
+    } while (s === 0 || s >= 1);
+
+    rnormv2 = v2 * Math.sqrt(-2 * Math.log(s) / s);
+    return stdev * v1 * Math.sqrt(-2 * Math.log(s) / s) + mean;
+  }
+
+  v2 = rnormv2;
+  rnormv2 = null;
+  return stdev * v2 + mean;
+}
+
+
+//
 const updateXcodeLocation = throttle(([ lat, lng ]) => {
   console.log('update xcode locations')
   // track location changes for total distance & average speed
   stats.pushMove(lat, lng)
 
-  const jitter = settings.addJitterToMoves.get() ? random(-0.000025, 0.000025, true) : 0
+  const jitter = settings.addJitterToMoves.get() ? getRandom(0, 0.000006) : 0
 
   const xcodeLocationData =
     `<gpx creator="Xcode" version="1.1"><wpt lat="${(lat + jitter).toFixed(6)}" lon="${(lng + jitter).toFixed(6)}"><name>PokemonLocation</name></wpt></gpx>`
