@@ -15,6 +15,7 @@ const lastMoveDirection = observable(null)
 
 const handleMove = action((direction) => {
   console.log('handle move')
+  // TODO: autopilot pause causes movement controls to show up
   autopilot.pause()
 
   const speedCoeff = settings.speedLimit.get()
@@ -50,16 +51,27 @@ const handleEscape = after(2, () => {
 
 window.addEventListener('keydown', ({ keyCode }) => {
   switch (keyCode) {
-  case 65:
-  case 81:
+  // A
+  // case 65:                                
+  // Q
+  // case 81:
+  // LEFT Arrow
   case 37: { return handleMove('LEFT') }
-  case 87:
-  case 90:
+  // W
+  // case 87:
+  // Z
+  // case 90:
+  // UP Arrow
   case 38: { return handleMove('UP') }
-  case 68:
+  // D
+  // case 68:
+  // RIGHT Arrow 
   case 39: { return handleMove('RIGHT') }
-  case 83:
+  // S
+  // case 83:
+  // DOWN Arrow
   case 40: { return handleMove('DOWN') }
+  // ESCAPE
   case 27: { return handleEscape() }
   default: return undefined
   }
