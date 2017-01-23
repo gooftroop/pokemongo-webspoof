@@ -186,10 +186,13 @@ class Autopilot {
   }
 
   @action pause = () => {
-    clearTimeout(this.steptimer)
-    this.steptimer = null
-    this.running = false
-    this.paused = true
+    // TODO: better check
+    if (this.steptimer) {
+      clearTimeout(this.steptimer)
+      this.steptimer = null
+      this.running = false
+      this.paused = true
+    }
   }
 
   // reset all store state
