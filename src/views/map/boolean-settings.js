@@ -18,7 +18,7 @@ const BooleanSettings = observer(() =>
         onClick={ () => setting.set(!setting.get()) }
         className={ cx('btn btn-sm', {
           'btn-primary': setting.get(),
-          'btn-secondary': !setting.get()
+          'btn-default': !setting.get()
         }) }>
         { label }
       </div>

@@ -29,7 +29,7 @@ const Shortcuts = observer(() =>
               autopilot.start()    
             })
         }}
-        className="btn btn-sm btn-secondary"
+        className="btn btn-sm btn-default"
       >
         Go { location }
       </div>

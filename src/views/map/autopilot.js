@@ -76,10 +76,12 @@ class Autopilot extends Component {
       .catch(() => this.placesAutocomplete.setVal(null))
   }
 
+
   @action handleSuggestionChange = ({ suggestion: { latlng: { lat, lng } } }) =>
     autopilot.scheduleTrip(lat, lng)
       .then(() => { if (!this.isModalOpen) this.isModalOpen = true })
       .catch(() => this.placesAutocomplete.setVal(null))
+
 
   @action handleStartAutopilot = () => {
     // reset modal state
@@ -167,8 +169,8 @@ class Autopilot extends Component {
                 key={ name }
                 className={ `col-sm-4 text-center ${name}` }
                 onClick={ this.handleSelectTravelMode(name, speed) }>
-                <div className={ cx('card travel-mode', { selected: name === this.travelMode }) }>
-                  <div className='card-block'>
+                <div className={ cx('travel-mode', { selected: name === this.travelMode }) }>
+                  <div>
                     <div className={ `fa fa-${icon}` } />
                     <div className='desc'>
                       <strong>{ capitalize(name) } </strong>

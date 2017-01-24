@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import 'bootstrap/dist/css/bootstrap.css'
+
 import React, { Component } from 'react'
 import GoogleMap from 'google-map-react'
 import { observable, action, toJS } from 'mobx'
@@ -101,7 +103,6 @@ class Map extends Component {
 
   render() {
     const [ latitude, longitude ] = userLocation
-
     return (
       <div className='google-map-container'>
         { /* only display google map when user geolocated */ }
