@@ -209,7 +209,7 @@ class Autopilot extends Component {
             <noscript /> }
 
           <div className='text-center row'>
-            <div className='col-xs-2'>
+            <div className='col-sm-2'>
               <button
                 type='button'
                 className='btn btn-block btn-sm btn-danger'
@@ -217,7 +217,7 @@ class Autopilot extends Component {
                 Cancel
               </button>
             </div>
-            <div className='col-xs-10'>
+            <div className='col-sm-10'>
               <button
                 type='button'
                 className='btn btn-block btn-sm btn-success'
