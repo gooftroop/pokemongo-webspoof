@@ -22,7 +22,9 @@ const Shortcuts = observer(() =>
       <div
         onClick={ (event) => {
           autopilot.stop()
+          // TODO:
           autopilot.speed = (event.shiftKey === true ? "~" : 13) / 3600 
+          
           autopilot.scheduleTrip(coords.lat, coords.long)
             .then(() => {
               autopilot.steps = JSON.parse(JSON.stringify(autopilot.accurateSteps))
@@ -30,6 +32,7 @@ const Shortcuts = observer(() =>
             })
         }}
         className="btn btn-sm btn-default"
+        key={ location }
       >
         Go { location }
       </div>

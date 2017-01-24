@@ -139,6 +139,7 @@ class Map extends Component {
           </div> }
 
         { /* controls, settings displayed on top of the map */ }
+        <Autopilot ref={ (ref) => { this.autopilot = ref } } />
         <Coordinates />
         <SpeedCounter />
         <SpeedLimit />
@@ -146,7 +147,6 @@ class Map extends Component {
         <Controls />
         <Shortcuts />
         <TotalDistance />
-        <Autopilot ref={ (ref) => { this.autopilot = ref } } />
       </div>
     )
   }

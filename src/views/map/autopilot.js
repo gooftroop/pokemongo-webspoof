@@ -123,9 +123,7 @@ class Autopilot extends Component {
           <i className='fa fa-pause' />
         </div>
       )
-    }
-
-    if (autopilot.paused) {
+    } else {
       return (
         <div
           className='toggle resume btn btn-success'
@@ -134,33 +132,30 @@ class Autopilot extends Component {
         </div>
       )
     }
-
-    return <noscript />
   }
 
   render() {
     return (
       <div className='autopilot'>
-        { this.renderTogglePause() }
 
-        { !autopilot.clean &&
+        <div className={"search-container " + cx('algolia-places') }>
+          <input ref={ (ref) => { this.placesEl = ref } } type='search' placeholder='Destination' />
+        </div>
+
+        <div className="status-container">
+          { this.renderTogglePause() }
           <div
             className='edit btn btn-primary'
             onClick={ this.handleChangeSpeed }>
             <i className={ `fa fa-${this.travelModeIcon}` } />
           </div>
-        }
-
-        <div className={ cx('algolia-places', { hide: !autopilot.clean }) }>
-          <input ref={ (ref) => { this.placesEl = ref } } type='search' placeholder='Destination' />
-        </div>
-
-        { !autopilot.clean &&
+          
           <div
             className='autopilot-btn btn btn-danger'
             onClick={ autopilot.stop }>
             Stop autopilot
-          </div> }
+          </div>
+        </div>
 
         <div className={ cx('autopilot-modal', { open: this.isModalOpen }) }>
           <div className='travel-modes row'>

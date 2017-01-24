@@ -3,8 +3,9 @@
   top: 10px;
   left: 10px;
 
-  .algolia-places {
+  .search-container {
     width: 330px;
+    margin-bottom: 8px;
 
     &.hide {
       display: none;
