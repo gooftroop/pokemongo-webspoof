@@ -8,8 +8,9 @@ import cx from 'classnames'
 
 import autopilot from '../../models/autopilot.js'
 
+// TODO: encapsulate in autopilot model
 const travelModes = [
-  [ 'walk', 9, 'street-view' ],
+  [ 'walk', 9, 'blind' ],
   [ 'cycling', 13, 'bicycle' ], // Credit to https://github.com/DJLectr0
   [ 'subway', 50, 'subway' ],
   [ 'truck', 80, 'truck' ],
@@ -21,7 +22,7 @@ const travelModes = [
 class Autopilot extends Component {
 
   @observable isModalOpen = false
-  @observable travelMode = 'walk'
+  @observable travelMode = 'cycling'
 
   @computed get speed() {
     const [ , speed ] = travelModes.find(([ t ]) => t === this.travelMode)
@@ -52,16 +53,35 @@ class Autopilot extends Component {
         if (autopilot.running && !autopilot.paused) {
           autopilot.pause()
         } else if (autopilot.paused) {
-          autopilot.start()
+          autopilot.resume()
         }
       }
     })
   }
 
+  @action handleDestinationRequest = ({ destination: { latlng: { lat, lng } } }) => {
+    autopilot.stop()
+
+    // TODO: currently we assume whatever speed is set
+    // var travelmode = travelModes[1];
+    // autopilot.speed = travelmode[1] / 3600
+    // this.travelMode = travelmode[0]
+
+    autopilot.scheduleTrip(lat, lng)
+      .then(() => { 
+        // TODO:
+        autopilot.steps = JSON.parse(JSON.stringify(autopilot.accurateSteps))
+        autopilot.start()
+      })
+      .catch(() => this.placesAutocomplete.setVal(null))
+  }
+
+
   @action handleSuggestionChange = ({ suggestion: { latlng: { lat, lng } } }) =>
     autopilot.scheduleTrip(lat, lng)
       .then(() => { if (!this.isModalOpen) this.isModalOpen = true })
       .catch(() => this.placesAutocomplete.setVal(null))
+
 
   @action handleStartAutopilot = () => {
     // reset modal state
@@ -149,8 +169,8 @@ class Autopilot extends Component {
                 key={ name }
                 className={ `col-sm-4 text-center ${name}` }
                 onClick={ this.handleSelectTravelMode(name, speed) }>
-                <div className={ cx('card travel-mode', { selected: name === this.travelMode }) }>
-                  <div className='card-block'>
+                <div className={ cx('travel-mode', { selected: name === this.travelMode }) }>
+                  <div>
                     <div className={ `fa fa-${icon}` } />
                     <div className='desc'>
                       <strong>{ capitalize(name) } </strong>
@@ -191,7 +211,7 @@ class Autopilot extends Component {
             <noscript /> }
 
           <div className='text-center row'>
-            <div className='col-xs-2'>
+            <div className='col-sm-2'>
               <button
                 type='button'
                 className='btn btn-block btn-sm btn-danger'
@@ -199,7 +219,7 @@ class Autopilot extends Component {
                 Cancel
               </button>
             </div>
-            <div className='col-xs-10'>
+            <div className='col-sm-10'>
               <button
                 type='button'
                 className='btn btn-block btn-sm btn-success'

@@ -34,9 +34,12 @@
 
     .travel-mode {
       cursor: pointer;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      padding: 30px;
 
       &.selected {
-        border: 1px solid #0275d8 !important;
+        border-color: #0275d8;
       }
 
       .fa {

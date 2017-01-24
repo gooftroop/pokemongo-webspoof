@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import 'bootstrap/dist/css/bootstrap.css'
+
 import React, { Component } from 'react'
 import GoogleMap from 'google-map-react'
 import { observable, action, toJS } from 'mobx'
@@ -32,7 +34,8 @@ class Map extends Component {
 
   @observable mapOptions = {
     keyboardShortcuts: false,
-    draggable: true
+    draggable: true,
+    disableDoubleClickZoom: true
   }
 
   componentWillMount() {
@@ -71,20 +74,35 @@ class Map extends Component {
     userLocation.replace([ latitude, longitude ])
   }
 
-  @action toggleMapDrag = () => {
-    this.mapOptions.draggable = !this.mapOptions.draggable
-    this.map.map_.setOptions(toJS(this.mapOptions))
+  clicks = 0
+  timer = null
+  handleSingleClick = (lat, lng, shiftdown) => {
+    console.log('single click', arguments)    
+    this.autopilot.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } })
   }
 
-  @action handleClick = ({x, y, lat, lng, force}) => {
-    if (!this.mapOptions.draggable || force) {
-      this.autopilot.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } })
+  handleDoubleClick = (lat, lng, shiftdown) => {
+    console.log('double click', arguments)
+    this.autopilot.handleDestinationRequest({ destination: { latlng: { lat, lng } } })
+  }
+
+  @action handleClick = ({lat, lng, shiftdown}) => {
+    this.clicks++
+
+    if (this.clicks === 1) {
+      setTimeout(function() {
+        if (this.clicks === 1) {
+          this.handleSingleClick.call(this, lat, lng, shiftdown)
+        } else {
+          this.handleDoubleClick.call(this, lat, lng, shiftdown)
+        }
+        this.clicks = 0;
+      }.bind(this), 300);
     }
   }
 
   render() {
     const [ latitude, longitude ] = userLocation
-
     return (
       <div className='google-map-container'>
         { /* only display google map when user geolocated */ }
@@ -97,7 +115,7 @@ class Map extends Component {
                 this.handleClick({
                   lat: result.lat,
                   lng: result.lng,
-                  force: result.event.shiftKey})
+                  shiftdown: result.event.shiftKey})
               }
             }
             options={ () => this.mapOptions }
@@ -119,20 +137,6 @@ class Map extends Component {
               className='fa fa-spin fa-2x fa-refresh' />
             <div>Loading user location & map...</div>
           </div> }
-
-        <div className='btn btn-drag-map'>
-          { this.mapOptions.draggable ?
-            <div
-              className='btn btn-sm btn-primary'
-              onClick={ this.toggleMapDrag }>
-              Map draggable
-            </div> :
-            <div
-              className='btn btn-sm btn-secondary'
-              onClick={ this.toggleMapDrag }>
-              Map locked
-            </div> }
-        </div>
 
         { /* controls, settings displayed on top of the map */ }
         <Coordinates />
