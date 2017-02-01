@@ -143,17 +143,17 @@ class Autopilot extends Component {
         </div>
 
         <div className="status-container">
+          <div
+            className='autopilot-btn btn btn-danger'
+            onClick={ autopilot.stop }
+            disabled={ !autopilot.running }>
+            Stop autopilot
+          </div>
           { this.renderTogglePause() }
           <div
             className='edit btn btn-primary'
             onClick={ this.handleChangeSpeed }>
             <i className={ `fa fa-${this.travelModeIcon}` } />
-          </div>
-          
-          <div
-            className='autopilot-btn btn btn-danger'
-            onClick={ autopilot.stop }>
-            Stop autopilot
           </div>
         </div>
 
