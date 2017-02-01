@@ -2,10 +2,6 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import cx from 'classnames'
 
-import autopilot from '../../models/autopilot.js'
-
-// import { addJitterToMoves, stationaryUpdates, updateXcodeLocation } from '../../models/settings.js'
-
 const shortcuts = [
   [ 'Base', {lat: 37.749272, long: -122.427651}],
   [ 'Pier 39', {lat: 37.811159, long: -122.410799}],
@@ -16,22 +12,14 @@ const shortcuts = [
   [ 'Abra Park', {lat: 37.582628, long: -122.343961}]
 ]
 
-// TODO: add randomization to destinations
 
-const Shortcuts = observer(() =>
-  <div className="shortcuts">
+class Shortcuts extends React.Component {
+  render() {
+    return   <div className="shortcuts">
     { shortcuts.map(([ location, coords ], idx) =>
       <div
         onClick={ (event) => {
-          autopilot.stop()
-          // TODO:
-          autopilot.speed = (event.shiftKey === true ? "~" : 13) / 3600 
-          
-          autopilot.scheduleTrip(coords.lat, coords.long)
-            .then(() => {
-              autopilot.steps = JSON.parse(JSON.stringify(autopilot.accurateSteps))
-              autopilot.start()    
-            })
+          this.props.onShortcutClick(event, coords)
         }}
         className="btn btn-sm btn-default"
         key={ location }
@@ -40,7 +28,8 @@ const Shortcuts = observer(() =>
       </div>
     )}
   </div>
-)
+  }
+}
 
 export default Shortcuts
           

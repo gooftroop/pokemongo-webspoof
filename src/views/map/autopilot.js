@@ -6,9 +6,11 @@ import { observer } from 'mobx-react'
 import places from 'places.js'
 import cx from 'classnames'
 
+import Shortcuts from './shortcuts.js'
 import autopilot from '../../models/autopilot.js'
 
 // TODO: encapsulate in autopilot model
+// NAME, SPEED, ICON
 const travelModes = [
   [ 'walk', 9, 'blind' ],
   [ 'cycling', 13, 'bicycle' ], // Credit to https://github.com/DJLectr0
@@ -112,6 +114,21 @@ class Autopilot extends Component {
     autopilot.pause()
     autopilot.scheduleTrip(lat, lng)
       .then(() => { if (!this.isModalOpen) this.isModalOpen = true })
+  }
+
+  @action shortcutClickHandler = (event, coords) => {
+    autopilot.stop()
+
+    // Set Speed
+    var travelmode = event.shiftKey ? travelModes[travelModes.length - 1] : travelModes[1]
+    autopilot.speed = travelmode[1] / 3600
+    this.travelMode = travelmode[0]
+    
+    autopilot.scheduleTrip(coords.lat, coords.long)
+      .then(() => {
+        autopilot.steps = JSON.parse(JSON.stringify(autopilot.accurateSteps))
+        autopilot.start()    
+      })
   }
 
   renderTogglePause() {
@@ -225,6 +242,7 @@ class Autopilot extends Component {
             </div>
           </div>
         </div>
+        <Shortcuts onShortcutClick={ this.shortcutClickHandler } />  
       </div>
     )
   }

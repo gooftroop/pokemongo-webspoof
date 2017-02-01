@@ -16,7 +16,6 @@ import BooleanSettings from './boolean-settings.js'
 import Coordinates from './coordinates.js'
 import SpeedLimit from './speed-limit.js'
 import Controls from './controls.js'
-import Shortcuts from './shortcuts.js'
 import TotalDistance from './total-distance.js'
 import Autopilot from './autopilot.js'
 import Pokeball from './pokeball.js'
@@ -145,7 +144,6 @@ class Map extends Component {
         <SpeedLimit />
         <BooleanSettings />
         <Controls />
-        <Shortcuts />
         <TotalDistance />
       </div>
     )

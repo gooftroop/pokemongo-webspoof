@@ -139,7 +139,7 @@ class Autopilot {
     this.paused = false
 
     const moveNextPoint = action(() => {
-      if (this.steps.length !== -1) {
+      if (this.steps.length > 0) {
         const [ { lat: nextLat, lng: nextLng } ] = this.steps
 
         // move to locaiton
