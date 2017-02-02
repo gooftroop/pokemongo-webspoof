@@ -107,6 +107,10 @@ class Autopilot {
             return { lat: calculatedLat, lng: calculatedLng }
           })
 
+          // TODO: force step on last desired coord in each segment
+          // NOTE: this potentially simulates a stop at each 'intersection' and final destination
+          stepsInBetween.push({lat:endLat(), lng:endLng()})
+
           return {
             distance: result.distance + pendingDistance,
             steps: [ ...result.steps, ...stepsInBetween ]
