@@ -40,8 +40,8 @@ class Autopilot extends Component {
 
   componentDidMount() {
     // initialize algolia places input
-    this.placesAutocomplete = places({ container: this.placesEl })
-    this.placesAutocomplete.on('change', this.handleSuggestionChange)
+    // this.placesAutocomplete = places({ container: this.placesEl })
+    // this.placesAutocomplete.on('change', this.handleSuggestionChange)
 
     window.addEventListener('keyup', ({ keyCode }) => {
       if (keyCode === 27 && this.isModalOpen) {
@@ -63,9 +63,21 @@ class Autopilot extends Component {
       .then(() => { if (!this.isModalOpen) this.isModalOpen = true })
       .catch(() => this.placesAutocomplete.setVal(null))
 
+  @action handleDestinationChange = ({ target }) => {
+    const value = target.value
+    if (value.indexOf(',') !== -1) {
+      const latLongs = target.value.split(',')
+      if (latLongs.length > 1 && latLongs[1]) {
+        autopilot.scheduleTrip(parseFloat(latLongs[0]), parseFloat(latLongs[1]))
+          .then(() => { if (!this.isModalOpen) this.isModalOpen = true })
+          .catch(() => this.placesAutocomplete.setVal(null))
+      }
+    }
+  }
+
   @action handleStartAutopilot = () => {
     // reset modal state
-    this.placesAutocomplete.setVal(null)
+    // this.placesAutocomplete.setVal(null)
 
     // TODO: Refactor it's ugly
     // update `autopilot` data
@@ -132,7 +144,8 @@ class Autopilot extends Component {
         }
 
         <div className={ cx('algolia-places', { hide: !autopilot.clean }) }>
-          <input ref={ (ref) => { this.placesEl = ref } } type='search' placeholder='Destination' />
+          {/* <input ref={ (ref) => { this.placesEl = ref } } type='search' placeholder='Destination' /> */}
+          <input type='search' placeholder='Destination' onChange={ this.handleDestinationChange } />
         </div>
 
         { !autopilot.clean &&
