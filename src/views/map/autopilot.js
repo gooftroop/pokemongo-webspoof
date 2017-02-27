@@ -75,6 +75,18 @@ class Autopilot extends Component {
     }
   }
 
+  @action handleDestinationChange = ({ target }) => {
+    const value = target.value
+    if (value.indexOf(',') !== -1) {
+      const latLongs = target.value.split(',')
+      if (latLongs.length > 1 && latLongs[1]) {
+        autopilot.scheduleTrip(parseFloat(latLongs[0]), parseFloat(latLongs[1]))
+          .then(() => { if (!this.isModalOpen) this.isModalOpen = true })
+          .catch(() => this.placesAutocomplete.setVal(null))
+      }
+    }
+  }
+
   @action handleStartAutopilot = () => {
     // reset modal state
     // this.placesAutocomplete.setVal(null)
@@ -146,7 +158,11 @@ class Autopilot extends Component {
 
         <div className={ cx('algolia-places', { hide: !autopilot.clean }) }>
           {/* <input ref={ (ref) => { this.placesEl = ref } } type='search' placeholder='Destination' /> */}
+<<<<<<< HEAD
           <input type='search' ref={ input => { this.textInput = input } } placeholder='Destination' onChange={ this.handleDestinationChange } />
+=======
+          <input type='search' placeholder='Destination' onChange={ this.handleDestinationChange } />
+>>>>>>> Now allowed to paste lat long in the search box
         </div>
 
         { !autopilot.clean &&
