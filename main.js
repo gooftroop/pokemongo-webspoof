@@ -1,20 +1,42 @@
 const electron = require('electron')
 const { resolve } = require('path')
 const { execSync } = require('child_process')
+const os = require('os')
 
 const tryCatch = require('./src/try-catch')
 
-const { app } = electron
-const { BrowserWindow } = electron
+const { app, Menu, BrowserWindow } = electron
+const pathToReactDevTools = `${os.homedir()}/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.0.12_0`
 
 // enable chrome dev-tools when builded
 // require('electron-debug')({ enabled: true, showDevTools: true })
 
 let win
 
+const template = [
+  {
+    label: 'Webspoof',
+    submenu: [ { role: 'quit' } ] },
+  {
+    label: 'Edit',
+    submenu: [
+    { role: 'cut' },
+    { role: 'copy' },
+    { role: 'paste' },
+    { role: 'delete' },
+    { role: 'selectall' } ] },
+  {
+    label: 'View',
+    submenu: [
+        { role: 'reload' },
+        { role: 'toggledevtools' } ] }
+]
+
 const createWindow = () => {
   win = new BrowserWindow({ width: 800, height: 800 })
   win.maximize()
+  BrowserWindow.addDevToolsExtension(pathToReactDevTools)
+
   win.loadURL(`file://${__dirname}/index.html`)
 
   // open external URLs into default browser
@@ -22,6 +44,7 @@ const createWindow = () => {
     e.preventDefault()
     execSync(`open ${url}`)
   })
+
 
   win.on('closed', () => { win = null })
 }
@@ -34,6 +57,7 @@ app.on('ready', () => {
 
     global.tmpProjectPath = path
     createWindow()
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
     execSync(`cp -R ${resolve(__dirname, 'xcode-project')} ${resolve(path)}`)
     execSync(`open ${resolve(path, 'xcode-project/pokemon-webspoof.xcodeproj')}`)

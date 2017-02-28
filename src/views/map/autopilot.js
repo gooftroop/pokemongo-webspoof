@@ -9,7 +9,7 @@ import cx from 'classnames'
 import autopilot from '../../models/autopilot.js'
 
 const travelModes = [
-  [ 'walk', 9, 'street-view' ],
+  [ 'walk', 10, 'street-view' ],
   [ 'cycling', 13, 'bicycle' ], // Credit to https://github.com/DJLectr0
   [ 'subway', 50, 'subway' ],
   [ 'truck', 80, 'truck' ],
@@ -58,10 +58,10 @@ class Autopilot extends Component {
     })
   }
 
-  @action handleSuggestionChange = ({ suggestion: { latlng: { lat, lng } } }) =>
-    autopilot.scheduleTrip(lat, lng)
-      .then(() => { if (!this.isModalOpen) this.isModalOpen = true })
-      .catch(() => this.placesAutocomplete.setVal(null))
+  // @action handleSuggestionChange = ({ suggestion: { latlng: { lat, lng } } }) =>
+  //   autopilot.scheduleTrip(lat, lng)
+  //     .then(() => { if (!this.isModalOpen) this.isModalOpen = true })
+  //     .catch(() => this.placesAutocomplete.setVal(null))
 
   @action handleDestinationChange = ({ target }) => {
     const value = target.value
@@ -89,7 +89,7 @@ class Autopilot extends Component {
 
   @action handleCancelAutopilot = () => {
     // reset modal state
-    this.placesAutocomplete.setVal(null)
+    // this.placesAutocomplete.setVal(null)
     this.isModalOpen = false
   }
 
