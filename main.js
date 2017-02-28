@@ -11,7 +11,7 @@ const pathToReactDevTools = `${os.homedir()}/Library/Application Support/Google/
 // enable chrome dev-tools when builded
 // require('electron-debug')({ enabled: true, showDevTools: true })
 
-let win
+let win, reactDevTools
 
 const template = [
   {
@@ -35,7 +35,7 @@ const template = [
 const createWindow = () => {
   win = new BrowserWindow({ width: 800, height: 800 })
   win.maximize()
-  BrowserWindow.addDevToolsExtension(pathToReactDevTools)
+  reactDevTools = BrowserWindow.addDevToolsExtension(pathToReactDevTools)
 
   win.loadURL(`file://${__dirname}/index.html`)
 
@@ -46,7 +46,10 @@ const createWindow = () => {
   })
 
 
-  win.on('closed', () => { win = null })
+  win.on('closed', () => {
+    BrowserWindow.removeDevToolsExtension(reactDevTools)
+    win = null
+  })
 }
 
 app.on('ready', () => {
