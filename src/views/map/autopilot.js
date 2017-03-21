@@ -3,7 +3,7 @@ import { capitalize } from 'lodash'
 import React, { Component } from 'react'
 import { action, observable, computed } from 'mobx'
 import { observer } from 'mobx-react'
-import places from 'places.js'
+// import places from 'places.js'
 import cx from 'classnames'
 
 import autopilot from '../../models/autopilot.js'
@@ -11,7 +11,7 @@ import autopilot from '../../models/autopilot.js'
 const travelModes = [
   [ 'walk', 10, 'street-view' ],
   [ 'cycling', 13, 'bicycle' ], // Credit to https://github.com/DJLectr0
-  [ 'subway', 50, 'subway' ],
+  [ 'bike', 35, 'motorcycle' ], // Credit to https://github.com/DJLectr0
   [ 'truck', 80, 'truck' ],
   [ 'car', 120, 'car' ],
   [ 'teleport', '~', 'star' ]
@@ -90,6 +90,7 @@ class Autopilot extends Component {
   @action handleCancelAutopilot = () => {
     // reset modal state
     // this.placesAutocomplete.setVal(null)
+    this.textInput.value = ''
     this.isModalOpen = false
   }
 
@@ -145,7 +146,7 @@ class Autopilot extends Component {
 
         <div className={ cx('algolia-places', { hide: !autopilot.clean }) }>
           {/* <input ref={ (ref) => { this.placesEl = ref } } type='search' placeholder='Destination' /> */}
-          <input type='search' placeholder='Destination' onChange={ this.handleDestinationChange } />
+          <input type='search' ref={ input => { this.textInput = input } } placeholder='Destination' onChange={ this.handleDestinationChange } />
         </div>
 
         { !autopilot.clean &&
