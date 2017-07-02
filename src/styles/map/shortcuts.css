@@ -1,0 +1,12 @@
+.shortcuts {
+  position: absolute;
+  top: 160px;
+  left: 10px;
+  width: 330px;
+}
+
+.shortcuts .btn {
+	display: block;
+	width: 100%;
+	margin-bottom: 10px;
+}

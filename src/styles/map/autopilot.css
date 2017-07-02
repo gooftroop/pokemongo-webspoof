@@ -3,8 +3,9 @@
   top: 10px;
   left: 10px;
 
-  .algolia-places {
+  .search-container {
     width: 330px;
+    margin-bottom: 8px;
 
     &.hide {
       display: none;
@@ -12,7 +13,6 @@
   }
 
   &-btn {
-    float: left;
     margin-right: 10px;
   }
 
@@ -34,9 +34,12 @@
 
     .travel-mode {
       cursor: pointer;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      padding: 30px;
 
       &.selected {
-        border: 1px solid #0275d8 !important;
+        border-color: #0275d8;
       }
 
       .fa {

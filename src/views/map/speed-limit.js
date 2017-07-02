@@ -15,7 +15,7 @@ const SpeedLimit = observer(() =>
         onClick={ () => speedLimit.set(coeff) }
         className={ cx('btn', {
           'btn-primary': coeff === speedLimit.get(),
-          'btn-secondary': coeff !== speedLimit.get()
+          'btn-default': coeff !== speedLimit.get()
         }) }>
         ~{ limit } meter/step
       </button>

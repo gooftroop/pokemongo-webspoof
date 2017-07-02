@@ -7,12 +7,12 @@ import userLocation from './user-location.js'
 
 class Autopilot {
 
-  timeout = null // inner setTimout to move next location
+  steptimer = null // inner setTimout to move next location
 
   @observable paused = false
   @observable running = false // is the autopilot running
   @observable steps = []
-  @observable speed = 9 / 3600 // 0.0025 ~= 2,5m/s ~= 9 km/h
+  @observable speed = 13 / 3600 // 0.0025 ~= 2,5m/s ~= 9 km/h
   @observable distance = 0 // remaining distance to arrival in km
   @observable rawOverviewPath = null // save last query to re-calculate optimized route
   @observable destination = { lat: null, lng: null };
@@ -46,6 +46,8 @@ class Autopilot {
     }
   }
 
+
+    
   findDirectionPath = (lat, lng) => new Promise((resolve, reject) => {
     const { google: { maps } } = window
     this.destination = { lat, lng }
@@ -105,6 +107,10 @@ class Autopilot {
             return { lat: calculatedLat, lng: calculatedLng }
           })
 
+          // TODO: force step on last desired coord in each segment
+          // NOTE: this potentially simulates a stop at each 'intersection' and final destination
+          stepsInBetween.push({lat:endLat(), lng:endLng()})
+
           return {
             distance: result.distance + pendingDistance,
             steps: [ ...result.steps, ...stepsInBetween ]
@@ -137,7 +143,7 @@ class Autopilot {
     this.paused = false
 
     const moveNextPoint = action(() => {
-      if (this.steps.length !== -1) {
+      if (this.steps.length > 0) {
         const [ { lat: nextLat, lng: nextLng } ] = this.steps
 
         // move to locaiton
@@ -147,8 +153,15 @@ class Autopilot {
 
         // move on to the next location
         if (this.steps.length !== 0) {
-          this.timeout = setTimeout(moveNextPoint, 1000)
+          this.steptimer = setTimeout(moveNextPoint, 1000)
         } else {
+          Alert.success(`
+            <strong>Alert</strong>
+            <div class=stack>Arrived at destination...</div`, { 
+              beep: 'src/assets/martian-gun.mp3',
+              timeout: 2000
+            }
+          )
           this.stop()
         }
       }
@@ -157,17 +170,39 @@ class Autopilot {
     moveNextPoint()
   }
 
+  @action resume = async () => {
+    try {
+      const foundPath = await this.findDirectionPath(this.destination.lat, this.destination.lng)
+      const { distance } = this.calculateIntermediateSteps(foundPath)
+
+      this.distance = distance
+
+      this.steps = JSON.parse(JSON.stringify(this.accurateSteps))
+      this.start()
+    } catch (error) {
+      Alert.error(`
+        <strong>Error with schedule trip</strong>
+        <div class='stack'>${error}</div>
+      `)
+
+      throw error
+    }
+  }
+
   @action pause = () => {
-    clearTimeout(this.timeout)
-    this.timeout = null
-    this.running = false
-    this.paused = true
+    // TODO: better check
+    if (this.steptimer) {
+      clearTimeout(this.steptimer)
+      this.steptimer = null
+      this.running = false
+      this.paused = true
+    }
   }
 
   // reset all store state
   @action stop = () => {
-    clearTimeout(this.timeout)
-    this.timeout = null
+    clearTimeout(this.steptimer)
+    this.steptimer = null
     this.paused = false
     this.running = false
     this.distance = 0

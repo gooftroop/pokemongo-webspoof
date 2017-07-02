@@ -15,8 +15,11 @@ export default {
   module: {
     rules: [
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
+      { test: /\.woff$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=[path][name].[ext]'}, 
+      { test: /\.woff2$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff2&name=[path][name].[ext]'},
+      { test: /\.(eot|ttf|svg|gif|png)$/, loader: "file-loader" },
       { test: /\.css$/, loader: 'style-loader!css-loader!postcss-loader' },
-      { test: /\.json$/, loader: 'json' }
+      { test: /\.json$/, loader: 'json-loader' }
     ]
   },
 

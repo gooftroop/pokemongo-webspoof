@@ -1,12 +1,13 @@
 .coordinates {
   position: absolute;
-  top: 60px;
+  top: 100px;
   left: 10px;
   width: 350px;
 
   .pull-xs-left {
     margin-right: 2%;
     width: 46%;
+    display: inline-block;
 
     &:last-child {
       margin-right: 0;

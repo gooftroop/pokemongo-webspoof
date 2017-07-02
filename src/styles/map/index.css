@@ -1,6 +1,7 @@
 @import './boolean-settings.css';
 @import './controls.css';
 @import './coordinates.css';
+@import './shortcuts.css';
 @import './pokeball.css';
 @import './speed-limit.css';
 @import './speed.css';
@@ -14,10 +15,4 @@
   position: relative;
   height: calc(100vh - $navbar-height);
   width: 100vw;
-
-  .btn-drag-map {
-    position: absolute;
-    bottom: 14px;
-    right: 30px;
-  }
 }

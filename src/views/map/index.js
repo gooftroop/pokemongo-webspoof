@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import 'bootstrap/dist/css/bootstrap.css'
+
 import React, { Component } from 'react'
 import GoogleMap from 'google-map-react'
 import { observable, action, toJS } from 'mobx'
@@ -23,9 +25,16 @@ class Map extends Component {
 
   map = null
 
+  home = {
+    lat: 37.74910039104447,
+    lng: -122.42801499999992
+  }
+
+
   @observable mapOptions = {
     keyboardShortcuts: false,
-    draggable: true
+    draggable: true,
+    disableDoubleClickZoom: true
   }
 
   componentWillMount() {
@@ -64,20 +73,35 @@ class Map extends Component {
     userLocation.replace([ latitude, longitude ])
   }
 
-  @action toggleMapDrag = () => {
-    this.mapOptions.draggable = !this.mapOptions.draggable
-    this.map.map_.setOptions(toJS(this.mapOptions))
+  clicks = 0
+  timer = null
+  handleSingleClick = (lat, lng, shiftdown) => {
+    console.log('single click', arguments)    
+    this.autopilot.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } })
   }
 
-  @action handleClick = ({ lat, lng }, force) => {
-    if (!this.mapOptions.draggable || force) {
-      this.autopilot.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } })
+  handleDoubleClick = (lat, lng, shiftdown) => {
+    console.log('double click', arguments)
+    this.autopilot.handleDestinationRequest({ destination: { latlng: { lat, lng } } })
+  }
+
+  @action handleClick = ({lat, lng, shiftdown}) => {
+    this.clicks++
+
+    if (this.clicks === 1) {
+      setTimeout(function() {
+        if (this.clicks === 1) {
+          this.handleSingleClick.call(this, lat, lng, shiftdown)
+        } else {
+          this.handleDoubleClick.call(this, lat, lng, shiftdown)
+        }
+        this.clicks = 0;
+      }.bind(this), 300);
     }
   }
 
   render() {
     const [ latitude, longitude ] = userLocation
-
     return (
       <div className='google-map-container'>
         { /* only display google map when user geolocated */ }
@@ -86,10 +110,17 @@ class Map extends Component {
             ref={ (ref) => { this.map = ref } }
             zoom={ settings.zoom.get() }
             center={ [ latitude, longitude ] }
-            onClick={ this.handleClick }
+            onClick={ (result) => {
+                this.handleClick({
+                  lat: result.lat,
+                  lng: result.lng,
+                  shiftdown: result.event.shiftKey})
+              }
+            }
             options={ () => this.mapOptions }
             onGoogleApiLoaded={ this.handleGoogleMapLoaded }
             yesIWantToUseGoogleMapApiInternals={ true }>
+
             { /* userlocation center */ }
             <Pokeball lat={ userLocation[0] } lng={ userLocation[1] } />
           </GoogleMap> :
@@ -106,28 +137,14 @@ class Map extends Component {
             <div>Loading user location & map...</div>
           </div> }
 
-        <div className='btn btn-drag-map'>
-          { this.mapOptions.draggable ?
-            <div
-              className='btn btn-sm btn-primary'
-              onClick={ this.toggleMapDrag }>
-              Map draggable
-            </div> :
-            <div
-              className='btn btn-sm btn-secondary'
-              onClick={ this.toggleMapDrag }>
-              Map locked
-            </div> }
-        </div>
-
         { /* controls, settings displayed on top of the map */ }
+        <Autopilot ref={ (ref) => { this.autopilot = ref } } />
         <Coordinates />
         <SpeedCounter />
         <SpeedLimit />
         <BooleanSettings />
         <Controls />
         <TotalDistance />
-        <Autopilot ref={ (ref) => { this.autopilot = ref } } />
       </div>
     )
   }
