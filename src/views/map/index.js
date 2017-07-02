@@ -46,6 +46,21 @@ class Map extends Component {
         { enableHighAccuracy: true, maximumAge: 0 }
       )
     }
+
+    // London
+    // this.handleGeolocationSuccess({ coords: { latitude: 51.507341, longitude: -0.127654 } })
+
+    // NYC
+    // this.handleGeolocationSuccess({ coords: { latitude: 40.764762, longitude: -73.973121 } })
+
+    // Sydney
+    // this.handleGeolocationSuccess({ coords: { latitude: -33.865935, longitude: 151.215482 } })
+
+    // Melbourne
+    // this.handleGeolocationSuccess({ coords: { latitude: -37.820855, longitude: 144.969598 } })
+
+    // Sao Paulo
+    // this.handleGeolocationSuccess({ coords: { latitude: -23.584369, longitude: -46.660948 } })
   }
 
   // geolocation API might be down, use http://ipinfo.io

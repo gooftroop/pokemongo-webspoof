@@ -3,7 +3,7 @@ import { capitalize } from 'lodash'
 import React, { Component } from 'react'
 import { action, observable, computed } from 'mobx'
 import { observer } from 'mobx-react'
-import places from 'places.js'
+// import places from 'places.js'
 import cx from 'classnames'
 
 import Shortcuts from './shortcuts.js'
@@ -13,8 +13,9 @@ import autopilot from '../../models/autopilot.js'
 // NAME, SPEED, ICON
 const travelModes = [
   [ 'walk', 9, 'blind' ],
+  [ 'walk', 10, 'street-view' ],
   [ 'cycling', 13, 'bicycle' ], // Credit to https://github.com/DJLectr0
-  [ 'subway', 50, 'subway' ],
+  [ 'bike', 35, 'motorcycle' ], // Credit to https://github.com/DJLectr0
   [ 'truck', 80, 'truck' ],
   [ 'car', 120, 'car' ],
   [ 'teleport', '~', 'star' ]
@@ -43,8 +44,8 @@ class Autopilot extends Component {
 
   componentDidMount() {
     // initialize algolia places input
-    this.placesAutocomplete = places({ container: this.placesEl })
-    this.placesAutocomplete.on('change', this.handleSuggestionChange)
+    // this.placesAutocomplete = places({ container: this.placesEl })
+    // this.placesAutocomplete.on('change', this.handleSuggestionChange)
 
     window.addEventListener('keyup', ({ keyCode }) => {
       if (keyCode === 27 && this.isModalOpen) {
@@ -84,10 +85,21 @@ class Autopilot extends Component {
       .then(() => { if (!this.isModalOpen) this.isModalOpen = true })
       .catch(() => this.placesAutocomplete.setVal(null))
 
+  @action handleDestinationChange = ({ target }) => {
+    const value = target.value
+    if (value.indexOf(',') !== -1) {
+      const latLongs = target.value.split(',')
+      if (latLongs.length > 1 && latLongs[1]) {
+        autopilot.scheduleTrip(parseFloat(latLongs[0]), parseFloat(latLongs[1]))
+          .then(() => { if (!this.isModalOpen) this.isModalOpen = true })
+          .catch(() => this.placesAutocomplete.setVal(null))
+      }
+    }
+  }
 
   @action handleStartAutopilot = () => {
     // reset modal state
-    this.placesAutocomplete.setVal(null)
+    // this.placesAutocomplete.setVal(null)
 
     // TODO: Refactor it's ugly
     // update `autopilot` data
@@ -99,7 +111,8 @@ class Autopilot extends Component {
 
   @action handleCancelAutopilot = () => {
     // reset modal state
-    this.placesAutocomplete.setVal(null)
+    // this.placesAutocomplete.setVal(null)
+    this.textInput.value = ''
     this.isModalOpen = false
   }
 
@@ -172,6 +185,11 @@ class Autopilot extends Component {
             onClick={ this.handleChangeSpeed }>
             <i className={ `fa fa-${this.travelModeIcon}` } />
           </div>
+        }
+
+        <div className={ cx('algolia-places', { hide: !autopilot.clean }) }>
+          {/* <input ref={ (ref) => { this.placesEl = ref } } type='search' placeholder='Destination' /> */}
+          <input type='search' ref={ input => { this.textInput = input } } placeholder='Destination' onChange={ this.handleDestinationChange } />
         </div>
 
         <div className={ cx('autopilot-modal', { open: this.isModalOpen }) }>

@@ -119,10 +119,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0730;
-				ORGANIZATIONNAME = iam4x;
+				ORGANIZATIONNAME = achakravarty;
 				TargetAttributes = {
 					46119DD11D397DE2005433C8 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 8MJ9X892G2;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -284,10 +285,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 8MJ9X892G2;
 				INFOPLIST_FILE = "pokemon-webspoof/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.iam4x.pokemon-webspoof";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.achakravarty.pokemon-webspoof";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -296,10 +298,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 8MJ9X892G2;
 				INFOPLIST_FILE = "pokemon-webspoof/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.iam4x.pokemon-webspoof";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.achakravarty.pokemon-webspoof";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

@@ -16,13 +16,14 @@ const Coordinates = observer(() =>
           <span className='input-group-addon' id='basic-addon1'>
             { direction }
           </span>
-          <input
+          <span
+            readOnly='true'
             type='text'
             className='form-control'
             placeholder={ direction }
-            aria-describedby='basic-addon1'
-            value={ userLocation[idx] }
-            onChange={ handleChange(idx) } />
+            aria-describedby='basic-addon1'>
+            { userLocation[idx] }
+          </span>
         </div>
       </div>
     ) }

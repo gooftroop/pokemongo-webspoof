@@ -11,6 +11,7 @@ export default {
     filename: 'index.js',
     chunkFilename: '[name].js'
   },
+  devtool: 'source-map',
 
   module: {
     rules: [
