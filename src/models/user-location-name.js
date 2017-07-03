@@ -1,11 +1,11 @@
-import { throttle } from 'lodash'
-import { observable } from 'mobx'
-import Alert from 'react-s-alert'
+import { throttle } from 'lodash';
+import { observable } from 'mobx';
+import Alert from 'react-s-alert';
 
-import userLocation from './user-location.js'
+import userLocation from './user-location.js';
 
-const geocoder = window.require('geocoder')
-const userLocatioName = observable('Unknown')
+const geocoder = window.require('geocoder');
+const userLocatioName = observable('Unknown');
 
 const reverseLocation = throttle(([ lat, lng ]) => {
   if (lat && lng) {
@@ -14,17 +14,17 @@ const reverseLocation = throttle(([ lat, lng ]) => {
         Alert.error(`
           <strong>Error while reverse location</strong>
           <div class='stack'>${err}</div>
-        `)
+        `);
 
-        return console.warn(err)
+        return console.warn(err);
       }
 
-      const { results: [ location ] } = data
-      if (location) userLocatioName.set(location.formatted_address)
-    })
+      const { results: [ location ] } = data;
+      if (location) userLocatioName.set(location.formatted_address);
+    });
   }
-}, 5000)
+}, 5000);
 
-userLocation.observe(() => reverseLocation(userLocation))
+userLocation.observe(() => reverseLocation(userLocation));
 
-export default userLocatioName
+export default userLocatioName;

@@ -1,10 +1,20 @@
 .autopilot {
   position: absolute;
+  width: 350px;
   top: 10px;
   left: 10px;
+  margin-bottom: 8px;
 
   .search-container {
-    width: 330px;
+    margin-bottom: 8px;
+
+    &.hide {
+      display: none;
+    }
+  }
+
+  .status-container {
+    width: 350px;
     margin-bottom: 8px;
 
     &.hide {
@@ -28,7 +38,7 @@
     width: 600px;
     z-index: 9999;
 
-    &.open{
+    &.open {
       display: block;
     }
 

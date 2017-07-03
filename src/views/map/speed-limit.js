@@ -1,10 +1,10 @@
-import React from 'react'
-import { observer } from 'mobx-react'
-import cx from 'classnames'
+import React from 'react';
+import { observer } from 'mobx-react';
+import cx from 'classnames';
 
-import { speedLimit } from '../../models/settings.js'
+import { speedLimit } from '../../models/settings.js';
 
-const presets = [ [ '6-3', 2 ], [ '3-2', 3 ], [ '2-1', 4 ] ]
+const presets = [ [ '6-3', 2 ], [ '3-2', 3 ], [ '2-1', 4 ] ];
 
 const SpeedLimit = observer(() =>
   <div className='speed-limit btn-group btn-group-sm'>
@@ -21,6 +21,6 @@ const SpeedLimit = observer(() =>
       </button>
     ) }
   </div>
-)
+);
 
-export default SpeedLimit
+export default SpeedLimit;

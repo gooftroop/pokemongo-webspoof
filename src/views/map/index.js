@@ -1,24 +1,24 @@
-import axios from 'axios'
+import axios from 'axios';
 
-import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap.css';
 
-import React, { Component } from 'react'
-import GoogleMap from 'google-map-react'
-import { observable, action, toJS } from 'mobx'
-import { observer } from 'mobx-react'
-import Alert from 'react-s-alert'
+import React, { Component } from 'react';
+import GoogleMap from 'google-map-react';
+import { observable, action } from 'mobx';
+import { observer } from 'mobx-react';
+import Alert from 'react-s-alert';
 
-import userLocation from '../../models/user-location.js'
-import settings from '../../models/settings.js'
+import userLocation from '../../models/user-location.js';
+import settings from '../../models/settings.js';
 
-import SpeedCounter from './speed-counter.js'
-import BooleanSettings from './boolean-settings.js'
-import Coordinates from './coordinates.js'
-import SpeedLimit from './speed-limit.js'
-import Controls from './controls.js'
-import TotalDistance from './total-distance.js'
-import Autopilot from './autopilot.js'
-import Pokeball from './pokeball.js'
+import SpeedCounter from './speed-counter.js';
+import BooleanSettings from './boolean-settings.js';
+import Location from './location.js';
+import SpeedLimit from './speed-limit.js';
+import Controls from './controls.js';
+import TotalDistance from './total-distance.js';
+import Autopilot from './autopilot.js';
+import Pokeball from './pokeball.js';
 
 @observer
 class Map extends Component {
@@ -44,23 +44,8 @@ class Map extends Component {
         this.handleGeolocationSuccess,
         this.handleGeolocationFail,
         { enableHighAccuracy: true, maximumAge: 0 }
-      )
+      );
     }
-
-    // London
-    // this.handleGeolocationSuccess({ coords: { latitude: 51.507341, longitude: -0.127654 } })
-
-    // NYC
-    // this.handleGeolocationSuccess({ coords: { latitude: 40.764762, longitude: -73.973121 } })
-
-    // Sydney
-    // this.handleGeolocationSuccess({ coords: { latitude: -33.865935, longitude: 151.215482 } })
-
-    // Melbourne
-    // this.handleGeolocationSuccess({ coords: { latitude: -37.820855, longitude: 144.969598 } })
-
-    // Sao Paulo
-    // this.handleGeolocationSuccess({ coords: { latitude: -23.584369, longitude: -46.660948 } })
   }
 
   // geolocation API might be down, use http://ipinfo.io
@@ -69,69 +54,69 @@ class Map extends Component {
     Alert.warning(`
       <strong>Error getting your geolocation, using IP location</strong>
       <div class='stack'>${geolocationErr.message}</div>
-    `, { timeout: 3000 })
+    `, { timeout: 3000 });
 
     try {
-      const { data: { loc } } = await axios({ url: 'http://ipinfo.io/' })
-      const [ latitude, longitude ] = loc.split(',').map(coord => parseFloat(coord))
-      this.handleGeolocationSuccess({ coords: { latitude, longitude } })
+      const { data: { loc } } = await axios({ url: 'http://ipinfo.io/' });
+      const [ latitude, longitude ] = loc.split(',').map(coord => parseFloat(coord));
+      this.handleGeolocationSuccess({ coords: { latitude, longitude } });
     } catch (xhrErr) {
       Alert.error(`
         <strong>Could not use IP location</strong>
         <div>Try to restart app, report issue to github</div>
         <div class='stack'>${xhrErr}</div>
-      `)
+      `);
     }
   }
 
   @action handleGeolocationSuccess({ coords: { latitude, longitude } }) {
-    userLocation.replace([ latitude, longitude ])
+    userLocation.replace([ latitude, longitude ]);
   }
 
   clicks = 0
   timer = null
   handleSingleClick = (lat, lng, shiftdown) => {
-    console.log('single click', arguments)    
-    this.autopilot.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } })
+    console.log('single click', arguments);
+    this.autopilot.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } });
   }
 
   handleDoubleClick = (lat, lng, shiftdown) => {
-    console.log('double click', arguments)
-    this.autopilot.handleDestinationRequest({ destination: { latlng: { lat, lng } } })
+    console.log('double click', arguments);
+    this.autopilot.handleDestinationRequest({ destination: { latlng: { lat, lng } } });
   }
 
-  @action handleClick = ({lat, lng, shiftdown}) => {
-    this.clicks++
+  @action handleClick = ({ lat, lng, shiftdown }) => {
+    this.clicks++;
 
     if (this.clicks === 1) {
-      setTimeout(function() {
+      setTimeout(() => {
         if (this.clicks === 1) {
-          this.handleSingleClick.call(this, lat, lng, shiftdown)
+          this.handleSingleClick.call(this, lat, lng, shiftdown);
         } else {
-          this.handleDoubleClick.call(this, lat, lng, shiftdown)
+          this.handleDoubleClick.call(this, lat, lng, shiftdown);
         }
         this.clicks = 0;
-      }.bind(this), 300);
+      }, 300);
     }
   }
 
   render() {
-    const [ latitude, longitude ] = userLocation
+    const [ latitude, longitude ] = userLocation;
     return (
       <div className='google-map-container'>
         { /* only display google map when user geolocated */ }
         { (latitude && longitude) ?
           <GoogleMap
-            ref={ (ref) => { this.map = ref } }
+            ref={ (ref) => { this.map = ref; } }
             zoom={ settings.zoom.get() }
             center={ [ latitude, longitude ] }
             onClick={ (result) => {
-                this.handleClick({
-                  lat: result.lat,
-                  lng: result.lng,
-                  shiftdown: result.event.shiftKey})
-              }
-            }
+              this.handleClick({
+                lat: result.lat,
+                lng: result.lng,
+                shiftdown: result.event.shiftKey
+              });
+            } }
             options={ () => this.mapOptions }
             onGoogleApiLoaded={ this.handleGoogleMapLoaded }
             yesIWantToUseGoogleMapApiInternals={ true }>
@@ -153,15 +138,15 @@ class Map extends Component {
           </div> }
 
         { /* controls, settings displayed on top of the map */ }
-        <Autopilot ref={ (ref) => { this.autopilot = ref } } />
-        <Coordinates />
+        <Autopilot ref={ (ref) => { this.autopilot = ref; } } />
+        <Location />
         <SpeedCounter />
         <SpeedLimit />
         <BooleanSettings />
         <Controls />
         <TotalDistance />
       </div>
-    )
+    );
   }
 }
-export default Map
+export default Map;

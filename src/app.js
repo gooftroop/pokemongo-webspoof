@@ -1,8 +1,8 @@
-import React from 'react'
-import Alert from 'react-s-alert'
+import React from 'react';
+import Alert from 'react-s-alert';
 
-import Map from './views/map'
-import Navbar from './views/navbar'
+import Map from './views/map';
+import Navbar from './views/navbar';
 
 const App = () =>
   <div className='app'>
@@ -17,6 +17,6 @@ const App = () =>
       position='bottom-right'
       stack={ { limit: 3 } }
       html={ true } />
-  </div>
+  </div>;
 
-export default App
+export default App;

@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
 const Pokeball = () =>
-  <img alt='pokeball' className='pokeball' src='./pokeball.png' />
+  <img alt='pokeball' className='pokeball' src='./pokeball.png' />;
 
-export default Pokeball
+export default Pokeball;

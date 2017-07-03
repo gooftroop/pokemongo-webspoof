@@ -1,3 +1,3 @@
-import { observable } from 'mobx'
+import { observable } from 'mobx';
 
-export default observable(0)
+export default observable(0);

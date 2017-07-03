@@ -1,4 +1,4 @@
-import { observable } from 'mobx'
+import { observable } from 'mobx';
 
 export default {
   updateXcodeLocation: observable(false),
@@ -6,4 +6,4 @@ export default {
   stationaryUpdates: observable(true),
   speedLimit: observable(4), // ~40-25 km/h
   zoom: observable(17) // map zoom
-}
+};

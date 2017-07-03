@@ -1,7 +1,7 @@
 module.exports = (func) => {
   try {
-    func()
+    func();
   } catch (e) {
-    console.warn(e.stack)
+    console.warn(e.stack);
   }
-}
+};
