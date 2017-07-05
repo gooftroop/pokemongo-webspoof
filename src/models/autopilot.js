@@ -48,15 +48,14 @@ class Autopilot {
 
 
   findDirectionPath = (lat, lng) => new Promise((resolve, reject) => {
-    debugger;
     const { google: { maps } } = window;
     this.destination = { lat, lng };
 
     // prepare `directionsRequest` to google map
     const directionsService = new maps.DirectionsService();
     const directionsRequest = {
-      origin: { lat: userLocation[0], lng: userLocation[1] },
-      destination: this.destination,
+      origin: new maps.LatLng({ lat: userLocation[0], lng: userLocation[1] }),
+      destination: new maps.LatLng(this.destination),
       travelMode: maps.TravelMode.WALKING,
       unitSystem: maps.UnitSystem.METRIC
     };

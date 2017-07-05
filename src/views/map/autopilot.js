@@ -13,7 +13,6 @@ import autopilot from '../../models/autopilot.js';
 // NAME, SPEED, ICON
 const travelModes = [
   [ 'walk', 9, 'blind' ],
-  [ 'walk', 10, 'street-view' ],
   [ 'cycling', 13, 'bicycle' ], // Credit to https://github.com/DJLectr0
   [ 'bike', 35, 'motorcycle' ], // Credit to https://github.com/DJLectr0
   [ 'truck', 80, 'truck' ],

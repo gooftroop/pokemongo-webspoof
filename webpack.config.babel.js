@@ -1,21 +1,23 @@
-import path from 'path'
-import webpack from 'webpack'
+import path from 'path';
+import webpack from 'webpack';
 
-const root = process.cwd()
+const root = process.cwd();
 
 export default {
   entry: [
     'babel-polyfill',
     './src/index.js'
   ],
-
+  target: 'electron',
   output: {
     path: path.join(root, 'dist'),
     filename: 'index.js',
-    chunkFilename: '[name].js'
+    chunkFilename: '[name].js',
+    library: 'PokemonGoWebspoof',
+    libraryTarget: 'commonjs2'
   },
   devtool: 'source-map',
-
+  externals: /config/,
   module: {
     rules: [
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
@@ -26,7 +28,6 @@ export default {
       { test: /\.json$/, loader: 'json-loader' }
     ]
   },
-
   plugins: [
     // https://github.com/postcss/postcss-loader/issues/99
     new webpack.LoaderOptionsPlugin({
@@ -67,4 +68,4 @@ export default {
       })
     ] : []
   ]
-}
+};

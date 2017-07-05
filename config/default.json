@@ -1,0 +1,19 @@
+{
+  "autopilot": {},
+  "map": {
+    "draggable": true,
+    "disableDoubleClickZoom": true,
+    "enableHighAccuracy": true,
+    "home": {
+      "lat": 0.0,
+      "lng": 0.0
+    },
+    "keyboardShortcuts": false,
+    "maximumAge": 0
+  },
+  "google": {
+    "maps": {
+      "apiKey": ""
+    }
+  }
+}

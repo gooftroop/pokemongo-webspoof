@@ -1,15 +1,14 @@
-import axios from 'axios';
-
 import 'bootstrap/dist/css/bootstrap.css';
 
-import React, { Component } from 'react';
+import Alert from 'react-s-alert';
+import axios from 'axios';
+import config from 'config';
 import GoogleMap from 'google-map-react';
+import React, { Component } from 'react';
 import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
-import Alert from 'react-s-alert';
-
-import userLocation from '../../models/user-location.js';
 import settings from '../../models/settings.js';
+import userLocation from '../../models/user-location.js';
 
 import SpeedCounter from './speed-counter.js';
 import BooleanSettings from './boolean-settings.js';
@@ -25,16 +24,23 @@ class Map extends Component {
 
   map = null
 
-  home = {
-    lat: 37.74910039104447,
-    lng: -122.42801499999992
-  }
+  home;
 
+  @observable mapOptions;
 
-  @observable mapOptions = {
-    keyboardShortcuts: false,
-    draggable: true,
-    disableDoubleClickZoom: true
+  constructor(props, context) {
+    super(props, context);
+    debugger;
+    this.home = {
+      lat: config.map.home.lat,
+      lng: config.map.home.lng
+    };
+
+    this.mapOptions = {
+      keyboardShortcuts: config.map.keyboardShortcuts,
+      draggable: config.map.draggable,
+      disableDoubleClickZoom: config.map.disableDoubleClickZoom
+    };
   }
 
   componentWillMount() {
@@ -43,7 +49,10 @@ class Map extends Component {
       navigator.geolocation.getCurrentPosition(
         this.handleGeolocationSuccess,
         this.handleGeolocationFail,
-        { enableHighAccuracy: true, maximumAge: 0 }
+        {
+          enableHighAccuracy: config.map.enableHighAccuracy,
+          maximumAge: config.map.maximumAge
+        }
       );
     }
   }
@@ -107,6 +116,7 @@ class Map extends Component {
         { /* only display google map when user geolocated */ }
         { (latitude && longitude) ?
           <GoogleMap
+            bootstrapURLKeys={ { key: config.google.maps.apiKey } }
             ref={ (ref) => { this.map = ref; } }
             zoom={ settings.zoom.get() }
             center={ [ latitude, longitude ] }

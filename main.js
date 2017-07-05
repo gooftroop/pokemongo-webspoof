@@ -11,6 +11,10 @@ const pathToReactDevTools = `${os.homedir()}/Library/Application Support/Google/
 // enable chrome dev-tools when builded
 require('electron-debug')({ enabled: true, showDevTools: true });
 
+if (process.versions && process.versions.electron) {
+  process.env.NODE_CONFIG_DIR = './config';
+}
+
 let win;
 let reactDevTools;
 

@@ -1,0 +1,13 @@
+{
+  "map": {
+    "home": {
+      "lat": 0.0,
+      "lng": 0.0
+    }
+  },
+  "google": {
+    "maps": {
+      "apiKey": "AIzaSyCckH1NksqpqsCYO_oOSNhnQG3PnKenmsk"
+    }
+  }
+}
