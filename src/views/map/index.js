@@ -18,6 +18,8 @@ import TotalDistance from './total-distance.js'
 import Autopilot from './autopilot.js'
 import Pokeball from './pokeball.js'
 
+import MapsApi from '../../config/api.js'
+
 @observer
 class Map extends Component {
 
@@ -104,7 +106,9 @@ class Map extends Component {
             onClick={ this.handleClick }
             options={ () => this.mapOptions }
             onGoogleApiLoaded={ this.handleGoogleMapLoaded }
-            yesIWantToUseGoogleMapApiInternals={ true }>
+            yesIWantToUseGoogleMapApiInternals={ true }
+            apiKey={ MapsApi.apiKey }>
+
             { /* userlocation center */ }
             <Pokeball lat={ userLocation[0] } lng={ userLocation[1] } />
           </GoogleMap> :
