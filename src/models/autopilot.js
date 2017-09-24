@@ -46,6 +46,14 @@ class Autopilot {
     }
   }
 
+  travelModes = [
+    [ 'walk', 9, 'blind' ],
+    [ 'cycling', 13, 'bicycle' ], // Credit to https://github.com/DJLectr0
+    [ 'bike', 35, 'motorcycle' ], // Credit to https://github.com/DJLectr0
+    [ 'truck', 80, 'truck' ],
+    [ 'car', 120, 'car' ],
+    [ 'teleport', '~', 'star' ]
+  ];
 
   findDirectionPath = (lat, lng) => new Promise((resolve, reject) => {
     const { google: { maps } } = window;

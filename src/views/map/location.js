@@ -31,8 +31,7 @@ export default class Location extends Component {
           ref={ (input) => { this.placesEl = input; } }
           className='form-control'
           type='search'
-          placeholder='Starting Location'
-          onChange={ this.handleDestinationChange } />
+          placeholder='Starting Location' />
       </div>
       <div className='coordinates'>
         { [ 'lat', 'lng' ].map((direction, idx) =>
@@ -41,15 +40,13 @@ export default class Location extends Component {
               <span className='input-group-addon' id='basic-addon1'>
                 { direction }
               </span>
-              <span
-                readOnly='true'
+              <input
                 type='text'
                 className='form-control'
                 placeholder={ direction }
-                onChange={ this.setUserCoordLocation }
-                aria-describedby='basic-addon1'>
-                { userLocation[idx] }
-              </span>
+                value={ userLocation[idx] }
+                onChange={ this.setUserCoordLocation(idx) }
+                aria-describedby='basic-addon1' />
             </div>
           </div>
         ) }

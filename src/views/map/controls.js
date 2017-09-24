@@ -14,8 +14,6 @@ import autopilot from '../../models/autopilot.js';
 const lastMoveDirection = observable(null);
 
 const handleMove = action((direction) => {
-  console.log('handle move');
-  // TODO: autopilot pause causes movement controls to show up
   autopilot.pause();
 
   const speedCoeff = settings.speedLimit.get();

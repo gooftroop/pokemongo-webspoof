@@ -9,38 +9,27 @@ import cx from 'classnames';
 // import Shortcuts from './shortcuts.js';
 import autopilot from '../../models/autopilot.js';
 
-// TODO: encapsulate in autopilot model
-// NAME, SPEED, ICON
-const travelModes = [
-  [ 'walk', 9, 'blind' ],
-  [ 'cycling', 13, 'bicycle' ], // Credit to https://github.com/DJLectr0
-  [ 'bike', 35, 'motorcycle' ], // Credit to https://github.com/DJLectr0
-  [ 'truck', 80, 'truck' ],
-  [ 'car', 120, 'car' ],
-  [ 'teleport', '~', 'star' ]
-];
-
 const KEY_ESCAPE = 27;
 const KEY_SPACE = 32;
 
 @observer
-class Autopilot extends Component {
+export default class Autopilot extends Component {
 
   @observable isModalOpen = false
   @observable travelMode = 'cycling'
 
   @computed get speed() {
-    const [ , speed ] = travelModes.find(([ t ]) => t === this.travelMode);
+    const [ , speed ] = autopilot.travelModes.find(([ t ]) => t === this.travelMode);
     return speed;
   }
 
   @computed get travelModeName() {
-    const [ travelModeName ] = travelModes.find(([ t ]) => t === this.travelMode);
+    const [ travelModeName ] = autopilot.travelModes.find(([ t ]) => t === this.travelMode);
     return travelModeName;
   }
 
   @computed get travelModeIcon() {
-    const [ , , travelModeIcon ] = travelModes.find(([ t ]) => t === this.travelMode);
+    const [ , , travelModeIcon ] = autopilot.travelModes.find(([ t ]) => t === this.travelMode);
     return travelModeIcon;
   }
 
@@ -136,7 +125,10 @@ class Autopilot extends Component {
     autopilot.stop();
 
     // Set Speed
-    const travelmode = event.shiftKey ? travelModes[travelModes.length - 1] : travelModes[1];
+    const travelmode = event.shiftKey ? autopilot.travelModes[
+      autopilot.travelModes.length - 1
+    ] : autopilot.travelModes[1];
+
     autopilot.speed = travelmode[1] / 3600;
     this.travelMode = travelmode[0];
 
@@ -198,7 +190,7 @@ class Autopilot extends Component {
 
         <div className={ cx('autopilot-modal', { open: this.isModalOpen }) }>
           <div className='travel-modes row'>
-            { travelModes.map(([ name, speed, icon ]) =>
+            { autopilot.travelModes.map(([ name, speed, icon ]) =>
               <div
                 key={ name }
                 className={ `col-sm-4 text-center ${name}` }
@@ -268,5 +260,3 @@ class Autopilot extends Component {
     );
   }
 }
-
-export default Autopilot;

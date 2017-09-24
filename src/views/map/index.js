@@ -20,7 +20,7 @@ import Autopilot from './autopilot.js';
 import Pokeball from './pokeball.js';
 
 @observer
-class Map extends Component {
+export default class Map extends Component {
 
   map = null
 
@@ -30,7 +30,7 @@ class Map extends Component {
 
   constructor(props, context) {
     super(props, context);
-    debugger;
+
     this.home = {
       lat: config.map.home.lat,
       lng: config.map.home.lng
@@ -84,18 +84,18 @@ class Map extends Component {
 
   clicks = 0
   timer = null
-  handleSingleClick = (lat, lng, shiftdown) => {
+  handleSingleClick = (lat, lng) => {
     console.log('single click', arguments);
     this.autopilot.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } });
   }
 
-  handleDoubleClick = (lat, lng, shiftdown) => {
+  handleDoubleClick = (lat, lng) => {
     console.log('double click', arguments);
     this.autopilot.handleDestinationRequest({ destination: { latlng: { lat, lng } } });
   }
 
   @action handleClick = ({ lat, lng, shiftdown }) => {
-    this.clicks++;
+    this.clicks += 1;
 
     if (this.clicks === 1) {
       setTimeout(() => {
@@ -159,4 +159,3 @@ class Map extends Component {
     );
   }
 }
-export default Map;
