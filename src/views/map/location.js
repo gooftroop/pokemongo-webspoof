@@ -20,9 +20,11 @@ export default class Location extends Component {
     userLocation[1] = parseFloat(lng);
   }
 
-  @action setUserCoordLocation = (idx) => action(({ target: { value } }) => {
-    userLocation[idx] = parseFloat(value);
-  })
+  @action setUserCoordLocation = (idx) => {
+    return action(({ target: { value } }) => {
+      userLocation[idx] = parseFloat(value);
+    });
+  }
 
   render() {
     return (<div className='clearfix location-container'>
@@ -34,8 +36,8 @@ export default class Location extends Component {
           placeholder='Starting Location' />
       </div>
       <div className='coordinates'>
-        { [ 'lat', 'lng' ].map((direction, idx) =>
-          <div key={ idx } className='pull-xs-left'>
+        { [ 'lat', 'lng' ].map((direction, idx) => {
+          return (<div key={ idx } className='pull-xs-left'>
             <div className='input-group'>
               <span className='input-group-addon' id='basic-addon1'>
                 { direction }
@@ -48,7 +50,8 @@ export default class Location extends Component {
                 onChange={ this.setUserCoordLocation(idx) }
                 aria-describedby='basic-addon1' />
             </div>
-          </div>
+          </div>);
+        }
         ) }
       </div>
     </div>);

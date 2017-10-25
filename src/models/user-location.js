@@ -114,7 +114,7 @@ const updateXcodeLocation = throttle(([ lat, lng ]) => {
 userLocation.intercept(validateCoordinates);
 
 // after update
-userLocation.observe(() => updateXcodeLocation(userLocation));
+userLocation.observe(() => { return updateXcodeLocation(userLocation); });
 
 // updated at random intervals to prevent reversion
 let currentTimer = null;
@@ -141,7 +141,7 @@ function scheduleUpdate() {
 }
 
 // watch settings for updates
-settings.stationaryUpdates.observe(() => scheduleUpdate());
+settings.stationaryUpdates.observe(() => { return scheduleUpdate(); });
 
 // initial trigger
 scheduleUpdate();

@@ -6,7 +6,7 @@ const os = require('os');
 const tryCatch = require('./src/try-catch');
 
 const { app, Menu, BrowserWindow } = electron;
-const pathToReactDevTools = `${os.homedir()}/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.4.0_0`;
+const pathToReactDevTools = `${os.homedir()}/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.5.2_0`;
 
 // enable chrome dev-tools when builded
 require('electron-debug')({ enabled: true, showDevTools: true });
@@ -72,11 +72,11 @@ app.on('ready', () => {
 
     // quit xcode && remove tmp directory on exit
     app.on('before-quit', () => {
-      tryCatch(() => execSync('killall Xcode'));
-      tryCatch(() => execSync(`rm -rf ${path}`));
+      tryCatch(() => { return execSync('killall Xcode'); });
+      tryCatch(() => { return execSync(`rm -rf ${path}`); });
     });
   });
 });
 
-app.on('window-all-closed', () => (process.platform !== 'darwin') && app.quit());
-app.on('activate', () => (win === null) && createWindow());
+app.on('window-all-closed', () => { return (process.platform !== 'darwin') && app.quit(); });
+app.on('activate', () => { return (win === null) && createWindow(); });
