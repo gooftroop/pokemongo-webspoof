@@ -1,5 +1,5 @@
 /* eslint max-len: 0 */
-import React from 'react'
+import React from 'react';
 
 const RAW_HTML = `
   <iframe
@@ -9,11 +9,12 @@ const RAW_HTML = `
     width="160px"
     height="30px">
   </iframe>
-`
+`;
 
 const GithubStar = () =>
-  <div
-    className='github-star'
-    dangerouslySetInnerHTML={ { __html: RAW_HTML } } />
+	<div
+		className='github-star'
+		dangerouslySetInnerHTML={ { __html: RAW_HTML } }
+	/>;
 
-export default GithubStar
+export default GithubStar;
