@@ -33,13 +33,16 @@ export default {
     new webpack.LoaderOptionsPlugin({
       test: /\.css$/,
       options: {
-        postcss: (webpackInstance) => [
-          require('postcss-import')({ addDependencyTo: webpackInstance }),
-          require('precss')()
-        ],
+        postcss: (webpackInstance) => {
+          return [
+            require('postcss-import')({ addDependencyTo: webpackInstance }),
+            require('precss')()
+          ];
+        },
         context: __dirname
       }
     }),
+    new webpack.IgnorePlugin(/vertx/),
     ...process.env.NODE_ENV === 'production' ? [
       new webpack.LoaderOptionsPlugin({ minimize: false, debug: false }),
       new webpack.optimize.DedupePlugin(),
