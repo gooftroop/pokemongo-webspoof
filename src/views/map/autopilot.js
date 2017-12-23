@@ -15,6 +15,7 @@ const KEY_SPACE = 32;
 @observer
 export default class Autopilot extends Component {
 
+  @observable travelMode = 'walk'
   @observable isModalOpen = false
   @observable travelMode = 'cycling'
 

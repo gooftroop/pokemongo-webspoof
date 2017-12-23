@@ -23,14 +23,13 @@ const validateCoordinates = ((change) => {
     const isValid = isValidLocation.test(`${lat}, ${lng}`);
     if (isValid) {
       return change;
-    } else {
-      Alert.warning(`
-        <strong>Invalid coordinates received</strong>
-        <div class='stack'>{ lat: ${lat}, lng: ${lng} }</div>
-      `);
-
-      throw new Error(`Invalid coordinates ${lat}, ${lng}`);
     }
+    Alert.warning(`
+      <strong>Invalid coordinates received</strong>
+      <div class='stack'>{ lat: ${lat}, lng: ${lng} }</div>
+    `);
+
+    throw new Error(`Invalid coordinates ${lat}, ${lng}`)
   }
 
   return change;
@@ -93,7 +92,7 @@ const updateXcodeLocation = throttle(([ lat, lng ]) => {
       return console.warn(error);
     }
 
-    if (settings.updateXcodeLocation.get()) {
+		if (settings.updateXcodeLocation.get()) {
       // reload location into xcode
       const scriptPath = resolve(window.__dirname, 'autoclick.applescript');
       exec(`osascript ${scriptPath}`, (autoclickErr, stdout, stderr) => {
@@ -110,6 +109,7 @@ const updateXcodeLocation = throttle(([ lat, lng ]) => {
   });
 }, 1000);
 
+userLocation.intercept(validateCoordinates);
 
 userLocation.intercept(validateCoordinates);
 

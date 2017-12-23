@@ -5,7 +5,7 @@ import axios from 'axios';
 import config from 'config';
 import GoogleMap from 'google-map-react';
 import React, { Component } from 'react';
-import { observable, action } from 'mobx';
+import { observable, action, toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import settings from '../../models/settings.js';
 import userLocation from '../../models/user-location.js';
@@ -19,10 +19,17 @@ import TotalDistance from './total-distance.js';
 import Autopilot from './autopilot.js';
 import Pokeball from './pokeball.js';
 
+import MapsApi from '../../config/api.js';
+
+// import Coordinates from './coordinates.js'; // TODO Needed?
 @observer
 export default class Map extends Component {
 
-  map = null
+	@observable
+	mapOptions = {
+		keyboardShortcuts: false,
+		draggable: true
+	};
 
   home;
 
@@ -55,12 +62,13 @@ export default class Map extends Component {
         }
       );
     }
-  }
+	}
 
-  // geolocation API might be down, use http://ipinfo.io
-  // source: http://stackoverflow.com/a/32338735
-  handleGeolocationFail = async (geolocationErr) => {
-    Alert.warning(`
+	// geolocation API might be down, use http://ipinfo.io
+	// source: http://stackoverflow.com/a/32338735
+	handleGeolocationFail = async (geolocationErr) => {
+		Alert.warning(
+			`
       <strong>Error getting your geolocation, using IP location</strong>
       <div class='stack'>${geolocationErr.message}</div>
     `, { timeout: 3000 });
@@ -84,10 +92,12 @@ export default class Map extends Component {
 
   clicks = 0
   timer = null
-  handleSingleClick = (lat, lng) => {
-    console.log('single click', arguments);
-    this.autopilot.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } });
-  }
+  
+	@action
+	toggleMapDrag = () => {
+		this.mapOptions.draggable = !this.mapOptions.draggable;
+		this.map.map_.setOptions(toJS(this.mapOptions));
+	};
 
   handleDoubleClick = (lat, lng) => {
     console.log('double click', arguments);
@@ -99,9 +109,7 @@ export default class Map extends Component {
 
     if (this.clicks === 1) {
       setTimeout(() => {
-        if (this.clicks === 1) {
-          this.handleSingleClick.call(this, lat, lng, shiftdown);
-        } else {
+        if (this.clicks === 2) {
           this.handleDoubleClick.call(this, lat, lng, shiftdown);
         }
         this.clicks = 0;
@@ -115,38 +123,63 @@ export default class Map extends Component {
       <div className='google-map-container'>
         { /* only display google map when user geolocated */ }
         { (latitude && longitude) ?
-          <GoogleMap
-            bootstrapURLKeys={ { key: config.google.maps.apiKey } }
-            ref={ (ref) => { this.map = ref; } }
-            zoom={ settings.zoom.get() }
-            center={ [ latitude, longitude ] }
-            onClick={ (result) => {
-              this.handleClick({
-                lat: result.lat,
-                lng: result.lng,
-                shiftdown: result.event.shiftKey
-              });
-            } }
-            options={ () => this.mapOptions }
-            onGoogleApiLoaded={ this.handleGoogleMapLoaded }
-            yesIWantToUseGoogleMapApiInternals={ true }>
+          (
+            <GoogleMap
+              bootstrapURLKeys={ { key: config.google.maps.apiKey } }
+              ref={ (ref) => { this.map = ref; } }
+              zoom={ settings.zoom.get() }
+              center={ [ latitude, longitude ] }
+              onClick={ (result) => {
+                this.handleClick({
+                  lat: result.lat,
+                  lng: result.lng,
+                  shiftdown: result.event.shiftKey
+                });
+              } }
+              options={ () => this.mapOptions }
+              onGoogleApiLoaded={ this.handleGoogleMapLoaded }
+              yesIWantToUseGoogleMapApiInternals
+            >
+              { /* userlocation center */ }
+              <Pokeball lat={ userLocation[0] } lng={ userLocation[1] } />
+            </GoogleMap>
+          ) : (
+            <div
+              style={ {
+                position: 'absolute',
+                top: 'calc(50vh - (100px / 2) - 60px)',
+                left: 'calc(50vw - (260px / 2))'
+              } }
+              className='alert alert-info text-center'
+            >
+              <i
+                style={ { marginBottom: 10 } }
+                className='fa fa-spin fa-2x fa-refresh'
+              />
+              <div>Loading user location & map...</div>
+            </div>
+          )
+        }
 
-            { /* userlocation center */ }
-            <Pokeball lat={ userLocation[0] } lng={ userLocation[1] } />
-          </GoogleMap> :
-          <div
-            style={ {
-              position: 'absolute',
-              top: 'calc(50vh - (100px / 2) - 60px)',
-              left: 'calc(50vw - (260px / 2))'
-            } }
-            className='alert alert-info text-center'>
-            <i
-              style={ { marginBottom: 10 } }
-              className='fa fa-spin fa-2x fa-refresh' />
-            <div>Loading user location & map...</div>
-          </div> }
-
+        <div className='btn btn-drag-map'>
+          { this.mapOptions.draggable ?
+            (
+              <div
+                className='btn btn-sm btn-primary'
+                onClick={this.toggleMapDrag}
+              >
+                Map Dragging Enabled
+              </div>
+            ) : (
+              <div
+                className='btn btn-sm btn-secondary'
+                onClick={this.toggleMapDrag}
+              >
+                Map Dragging Locked
+              </div>
+            )
+          }
+        </div>
         { /* controls, settings displayed on top of the map */ }
         <Autopilot ref={ (ref) => { this.autopilot = ref; } } />
         <Location />

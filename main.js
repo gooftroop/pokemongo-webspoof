@@ -50,6 +50,11 @@ const createWindow = () => {
     execSync(`open ${url}`);
   });
 
+	win.on('closed', () => {
+		BrowserWindow.removeDevToolsExtension(reactDevTools);
+		win = null;
+	});
+};
 
   win.on('closed', () => {
     BrowserWindow.removeDevToolsExtension(reactDevTools);

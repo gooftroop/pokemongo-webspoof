@@ -12,8 +12,9 @@ const RAW_HTML = `
 `;
 
 const GithubStar = () =>
-  <div
-    className='github-star'
-    dangerouslySetInnerHTML={ { __html: RAW_HTML } } />;
+	<div
+		className='github-star'
+		dangerouslySetInnerHTML={ { __html: RAW_HTML } }
+	/>;
 
 export default GithubStar;

@@ -10,7 +10,6 @@ import settings from '../../models/settings.js';
 // HACK DIRECTLY TO MODEL
 import autopilot from '../../models/autopilot.js';
 
-
 const lastMoveDirection = observable(null);
 
 const handleMove = action((direction) => {
@@ -76,15 +75,16 @@ window.addEventListener('keydown', ({ keyCode }) => {
 });
 
 const Controls = observer(() =>
-  <div className='controls'>
-    { [ 'UP', 'DOWN', 'LEFT', 'RIGHT' ].map(direction =>
-      <span
-        key={ direction }
-        onClick={ () => handleMove(direction) }
-        className={ cx(
+	<div className='controls'>
+		{ ['UP', 'DOWN', 'LEFT', 'RIGHT'].map(direction =>
+			<span
+				key={ direction }
+				onClick={ () => handleMove(direction) }
+				className={ cx(
           `octicon octicon-arrow-${direction.toLowerCase()}`,
           { last: lastMoveDirection.get() === direction }
-        ) } />
+        ) }
+			/>
     ) }
   </div>
 );

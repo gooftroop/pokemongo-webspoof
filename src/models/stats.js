@@ -6,7 +6,7 @@ import { updateXcodeLocation } from './settings.js';
 
 class Stats {
 
-  timeout = null
+	timeout = null
 
   @observable totalDistance = 0
   @observable lastLocation = null
@@ -21,9 +21,8 @@ class Stats {
       if (idx > 0) {
         const stepDistance = haversine(this.lastMoves[idx - 1], curr);
         return total + stepDistance;
-      } else {
-        return total;
       }
+      return total;
     }, 0);
 
     const [ { timestamp: startTime } ] = this.lastMoves;

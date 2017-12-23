@@ -7,11 +7,11 @@ import userLocation from './user-location.js';
 const geocoder = window.require('geocoder');
 const userLocatioName = observable('Unknown');
 
-const reverseLocation = throttle(([ lat, lng ]) => {
-  if (lat && lng) {
-    geocoder.reverseGeocode(lat, lng, (err, data) => {
-      if (err) {
-        Alert.error(`
+const reverseLocation = throttle(([lat, lng]) => {
+	if (lat && lng) {
+		geocoder.reverseGeocode(lat, lng, (err, data) => {
+			if (err) {
+				Alert.error(`
           <strong>Error while reverse location</strong>
           <div class='stack'>${err}</div>
         `);

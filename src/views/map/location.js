@@ -15,15 +15,13 @@ export default class Location extends Component {
     this.placesAutocomplete.on('change', this.handleSuggestionChange);
   }
 
+  @action setUserCoordLocation = idx => action(({ target: { value } }) => {
+    userLocation[idx] = parseFloat(value);
+  })
+
   @action handleSuggestionChange = ({ suggestion: { latlng: { lat, lng } } }) => {
     userLocation[0] = parseFloat(lat);
     userLocation[1] = parseFloat(lng);
-  }
-
-  @action setUserCoordLocation = (idx) => {
-    return action(({ target: { value } }) => {
-      userLocation[idx] = parseFloat(value);
-    });
   }
 
   render() {
@@ -33,25 +31,25 @@ export default class Location extends Component {
           ref={ (input) => { this.placesEl = input; } }
           className='form-control'
           type='search'
-          placeholder='Starting Location' />
+          placeholder='Starting Location'
+        />
       </div>
       <div className='coordinates'>
-        { [ 'lat', 'lng' ].map((direction, idx) => {
-          return (<div key={ idx } className='pull-xs-left'>
-            <div className='input-group'>
-              <span className='input-group-addon' id='basic-addon1'>
-                { direction }
-              </span>
-              <input
-                type='text'
-                className='form-control'
-                placeholder={ direction }
-                value={ userLocation[idx] }
-                onChange={ this.setUserCoordLocation(idx) }
-                aria-describedby='basic-addon1' />
-            </div>
-          </div>);
-        }
+        { ['lat', 'lng'].map((direction, idx) => (<div key={ idx } className='pull-xs-left'>
+          <div className='input-group'>
+            <span className='input-group-addon' id='basic-addon1'>
+              { direction }
+            </span>
+            <input
+              type='text'
+              className='form-control'
+              placeholder={ direction }
+              value={ userLocation[idx] }
+              onChange={ this.setUserCoordLocation(idx) }
+              aria-describedby='basic-addon1'
+            />
+          </div>
+        </div>)
         ) }
       </div>
     </div>);

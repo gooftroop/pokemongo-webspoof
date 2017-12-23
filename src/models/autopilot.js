@@ -18,12 +18,11 @@ class Autopilot {
   @observable destination = { lat: null, lng: null };
 
   @computed get accurateSteps() {
-    if (this.rawOverviewPath) {
-      const { steps } = this.calculateIntermediateSteps(this.rawOverviewPath);
-      return steps;
-    } else {
-      return [];
-    }
+  	if (this.rawOverviewPath) {
+  		const { steps } = this.calculateIntermediateSteps(this.rawOverviewPath);
+  		return steps;
+  	}
+  	return [];
   }
 
   @computed get clean() {
@@ -81,13 +80,13 @@ class Autopilot {
     });
   })
 
-  calculateIntermediateSteps = (foundPath) =>
+	calculateIntermediateSteps = foundPath =>
     foundPath.reduce(
       (result, { lat: endLat, lng: endLng }, idx) => {
         if (idx > 0) {
           const { lat: startLat, lng: startLng } = foundPath[idx - 1];
 
-          const pendingDistance = haversine(
+		const pendingDistance = haversine(
             { latitude: startLat(), longitude: startLng() },
             { latitude: endLat(), longitude: endLng() }
           );
