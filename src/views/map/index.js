@@ -7,6 +7,7 @@ import GoogleMap from 'google-map-react';
 import React, { Component } from 'react';
 import { observable, action, toJS } from 'mobx';
 import { observer } from 'mobx-react';
+
 import settings from '../../models/settings.js';
 import userLocation from '../../models/user-location.js';
 
@@ -87,29 +88,14 @@ export default class Map extends Component {
     userLocation.replace([latitude, longitude]);
   }
 
-  clicks = 0
-  timer = null
-
   @action toggleMapDrag = () => {
-    this.mapOptions.draggable = !this.mapOptions.draggable;
-    this.map.map_.setOptions(toJS(this.mapOptions));
-  };
-
-  handleDoubleClick = (lat, lng) => {
-    console.log('double click', arguments);
-    this.autopilot.handleDestinationRequest({ destination: { latlng: { lat, lng } } });
+    this.mapOptions.draggable = !this.mapOptions.draggable
+    this.map.map_.setOptions(toJS(this.mapOptions))
   }
 
-  @action handleClick = ({ lat, lng, shiftdown }) => {
-    this.clicks += 1;
-
-    if (this.clicks === 1) {
-      setTimeout(() => {
-        if (this.clicks === 2) {
-          this.handleDoubleClick.call(this, lat, lng, shiftdown);
-        }
-        this.clicks = 0;
-      }, 300);
+  @action handleClick = ({ lat, lng }, force) => {
+    if (!this.mapOptions.draggable || force) {
+      this.autopilot.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } })
     }
   }
 
@@ -121,20 +107,15 @@ export default class Map extends Component {
         { (latitude && longitude) ?
           (
             <GoogleMap
-              bootstrapURLKeys={ { key: config.google.maps.apiKey } }
               ref={ (ref) => { this.map = ref; } }
               zoom={ settings.zoom.get() }
               center={ [latitude, longitude] }
-              onClick={ (result) => {
-                this.handleClick({
-                  lat: result.lat,
-                  lng: result.lng,
-                  shiftdown: result.event.shiftKey
-                });
-              } }
+              onClick={ this.handleClick }
               options={ () => this.mapOptions }
               onGoogleApiLoaded={ this.handleGoogleMapLoaded }
-              yesIWantToUseGoogleMapApiInternals>
+              yesIWantToUseGoogleMapApiInternals
+              apiKey={ config.google.maps.apiKey }>
+            >
               { /* userlocation center */ }
               <Pokeball lat={ userLocation[0] } lng={ userLocation[1] } />
             </GoogleMap>
