@@ -1,5 +1,7 @@
 import path from 'path';
 import webpack from 'webpack';
+import precss from 'precss';
+import postcssImport from 'postcss-import';
 
 const root = process.cwd();
 
@@ -33,12 +35,10 @@ export default {
     new webpack.LoaderOptionsPlugin({
       test: /\.css$/,
       options: {
-        postcss: (webpackInstance) => {
-          return [
-            require('postcss-import')({ addDependencyTo: webpackInstance }),
-            require('precss')()
-          ];
-        },
+        postcss: webpackInstance => [
+          postcssImport({ addDependencyTo: webpackInstance }),
+          precss()
+        ],
         context: __dirname
       }
     }),

@@ -6,7 +6,7 @@ import { updateXcodeLocation } from './settings.js';
 
 class Stats {
 
-	timeout = null
+  timeout = null
 
   @observable totalDistance = 0
   @observable lastLocation = null
@@ -25,7 +25,7 @@ class Stats {
       return total;
     }, 0);
 
-    const [ { timestamp: startTime } ] = this.lastMoves;
+    const [{ timestamp: startTime }] = this.lastMoves;
     const { timestamp: endTime } = last(this.lastMoves);
     const lastMovesTime = ((endTime - startTime) / (1000 * 60 * 60)); // in hours
 

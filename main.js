@@ -1,7 +1,8 @@
 const electron = require('electron');
+const os = require('os');
+const tmp = require('tmp');
 const { resolve } = require('path');
 const { execSync } = require('child_process');
-const os = require('os');
 
 const tryCatch = require('./src/try-catch');
 
@@ -21,7 +22,7 @@ let reactDevTools;
 const template = [
   {
     label: 'Webspoof',
-    submenu: [ { role: 'quit' } ] },
+    submenu: [{ role: 'quit' }] },
   {
     label: 'Edit',
     submenu: [
@@ -29,12 +30,12 @@ const template = [
     { role: 'copy' },
     { role: 'paste' },
     { role: 'delete' },
-    { role: 'selectall' } ] },
+    { role: 'selectall' }] },
   {
     label: 'View',
     submenu: [
         { role: 'reload' },
-        { role: 'toggledevtools' } ] }
+        { role: 'toggledevtools' }] }
 ];
 
 const createWindow = () => {
@@ -50,12 +51,6 @@ const createWindow = () => {
     execSync(`open ${url}`);
   });
 
-	win.on('closed', () => {
-		BrowserWindow.removeDevToolsExtension(reactDevTools);
-		win = null;
-	});
-};
-
   win.on('closed', () => {
     BrowserWindow.removeDevToolsExtension(reactDevTools);
     win = null;
@@ -63,8 +58,6 @@ const createWindow = () => {
 };
 
 app.on('ready', () => {
-  const tmp = require('tmp');
-
   tmp.dir((err, path) => {
     if (err) throw err;
 
@@ -77,11 +70,11 @@ app.on('ready', () => {
 
     // quit xcode && remove tmp directory on exit
     app.on('before-quit', () => {
-      tryCatch(() => { return execSync('killall Xcode'); });
-      tryCatch(() => { return execSync(`rm -rf ${path}`); });
+      tryCatch(() => execSync('killall Xcode'));
+      tryCatch(() => execSync(`rm -rf ${path}`));
     });
   });
 });
 
-app.on('window-all-closed', () => { return (process.platform !== 'darwin') && app.quit(); });
-app.on('activate', () => { return (win === null) && createWindow(); });
+app.on('window-all-closed', () => (process.platform !== 'darwin') && app.quit());
+app.on('activate', () => (win === null) && createWindow());

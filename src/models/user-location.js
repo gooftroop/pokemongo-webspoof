@@ -12,14 +12,14 @@ const { resolve } = window.require('path');
 const { exec } = window.require('child_process');
 const { remote } = window.require('electron');
 
-const userLocation = observable([ 0, 0 ]);
+const userLocation = observable([0, 0]);
 
 const isValidLocation = /^([-+]?\d{1,2}([.]\d+)?),\s*([-+]?\d{1,3}([.]\d+)?)$/;
 
 const validateCoordinates = ((change) => {
   // check that we have valid coordinates before update
   if (change.type === 'splice') {
-    const { added: [ lat, lng ] } = change;
+    const { added: [lat, lng] } = change;
     const isValid = isValidLocation.test(`${lat}, ${lng}`);
     if (isValid) {
       return change;
@@ -29,7 +29,7 @@ const validateCoordinates = ((change) => {
       <div class='stack'>{ lat: ${lat}, lng: ${lng} }</div>
     `);
 
-    throw new Error(`Invalid coordinates ${lat}, ${lng}`)
+    throw new Error(`Invalid coordinates ${lat}, ${lng}`);
   }
 
   return change;
@@ -42,12 +42,15 @@ const getRandom = (mean, stdev) => {
   let v1;
   let v2;
   let s;
+  let mn = mean;
+  let stdv = stdev;
+
   if (mean === undefined) {
-    mean = 0.0;
+    mn = 0.0;
   }
 
   if (stdev === undefined) {
-    stdev = 1.0;
+    stdv = 1.0;
   }
 
   if (rnormv2 === null) {
@@ -57,19 +60,19 @@ const getRandom = (mean, stdev) => {
 
       v1 = 2 * (u1 - 1);
       v2 = 2 * (u2 - 1);
-      s = v1 * v1 + v2 * v2;
+      s = (v1 * v1) + (v2 * v2);
     } while (s === 0 || s >= 1);
 
-    rnormv2 = v2 * Math.sqrt(-2 * Math.log(s) / s);
-    return stdev * v1 * Math.sqrt(-2 * Math.log(s) / s) + mean;
+    rnormv2 = v2 * Math.sqrt((-2 * Math.log(s)) / s);
+    return (stdv * v1 * Math.sqrt((-2 * Math.log(s)) / s)) + mn;
   }
 
   v2 = rnormv2;
   rnormv2 = null;
-  return stdev * v2 + mean;
+  return (stdv * v2) + mn;
 };
 
-const updateXcodeLocation = throttle(([ lat, lng ]) => {
+const updateXcodeLocation = throttle(([lat, lng]) => {
   console.log('update xcode locations');
   // track location changes for total distance & average speed
   stats.pushMove(lat, lng);
@@ -92,7 +95,7 @@ const updateXcodeLocation = throttle(([ lat, lng ]) => {
       return console.warn(error);
     }
 
-		if (settings.updateXcodeLocation.get()) {
+    if (settings.updateXcodeLocation.get()) {
       // reload location into xcode
       const scriptPath = resolve(window.__dirname, 'autoclick.applescript');
       exec(`osascript ${scriptPath}`, (autoclickErr, stdout, stderr) => {
@@ -104,8 +107,12 @@ const updateXcodeLocation = throttle(([ lat, lng ]) => {
 
           return console.warn(stderr);
         }
+
+        return null;
       });
     }
+
+    return null;
   });
 }, 1000);
 
@@ -114,7 +121,7 @@ userLocation.intercept(validateCoordinates);
 userLocation.intercept(validateCoordinates);
 
 // after update
-userLocation.observe(() => { return updateXcodeLocation(userLocation); });
+userLocation.observe(() => updateXcodeLocation(userLocation));
 
 // updated at random intervals to prevent reversion
 let currentTimer = null;
@@ -141,7 +148,7 @@ function scheduleUpdate() {
 }
 
 // watch settings for updates
-settings.stationaryUpdates.observe(() => { return scheduleUpdate(); });
+settings.stationaryUpdates.observe(() => scheduleUpdate());
 
 // initial trigger
 scheduleUpdate();

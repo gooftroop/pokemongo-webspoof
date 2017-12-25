@@ -19,21 +19,9 @@ import TotalDistance from './total-distance.js';
 import Autopilot from './autopilot.js';
 import Pokeball from './pokeball.js';
 
-import MapsApi from '../../config/api.js';
-
 // import Coordinates from './coordinates.js'; // TODO Needed?
 @observer
 export default class Map extends Component {
-
-	@observable
-	mapOptions = {
-		keyboardShortcuts: false,
-		draggable: true
-	};
-
-  home;
-
-  @observable mapOptions;
 
   constructor(props, context) {
     super(props, context);
@@ -62,20 +50,29 @@ export default class Map extends Component {
         }
       );
     }
-	}
+  }
 
-	// geolocation API might be down, use http://ipinfo.io
-	// source: http://stackoverflow.com/a/32338735
-	handleGeolocationFail = async (geolocationErr) => {
-		Alert.warning(
-			`
+  @observable
+  mapOptions = {
+    keyboardShortcuts: false,
+    draggable: true
+  };
+
+  home;
+
+  @observable mapOptions;
+
+  // geolocation API might be down, use http://ipinfo.io
+  // source: http://stackoverflow.com/a/32338735
+  handleGeolocationFail = async (geolocationErr) => {
+    Alert.warning(`
       <strong>Error getting your geolocation, using IP location</strong>
       <div class='stack'>${geolocationErr.message}</div>
     `, { timeout: 3000 });
 
     try {
       const { data: { loc } } = await axios({ url: 'http://ipinfo.io/' });
-      const [ latitude, longitude ] = loc.split(',').map(coord => parseFloat(coord));
+      const [latitude, longitude] = loc.split(',').map(coord => parseFloat(coord));
       this.handleGeolocationSuccess({ coords: { latitude, longitude } });
     } catch (xhrErr) {
       Alert.error(`
@@ -87,17 +84,16 @@ export default class Map extends Component {
   }
 
   @action handleGeolocationSuccess({ coords: { latitude, longitude } }) {
-    userLocation.replace([ latitude, longitude ]);
+    userLocation.replace([latitude, longitude]);
   }
 
   clicks = 0
   timer = null
-  
-	@action
-	toggleMapDrag = () => {
-		this.mapOptions.draggable = !this.mapOptions.draggable;
-		this.map.map_.setOptions(toJS(this.mapOptions));
-	};
+
+  @action toggleMapDrag = () => {
+    this.mapOptions.draggable = !this.mapOptions.draggable;
+    this.map.map_.setOptions(toJS(this.mapOptions));
+  };
 
   handleDoubleClick = (lat, lng) => {
     console.log('double click', arguments);
@@ -118,7 +114,7 @@ export default class Map extends Component {
   }
 
   render() {
-    const [ latitude, longitude ] = userLocation;
+    const [latitude, longitude] = userLocation;
     return (
       <div className='google-map-container'>
         { /* only display google map when user geolocated */ }
@@ -128,7 +124,7 @@ export default class Map extends Component {
               bootstrapURLKeys={ { key: config.google.maps.apiKey } }
               ref={ (ref) => { this.map = ref; } }
               zoom={ settings.zoom.get() }
-              center={ [ latitude, longitude ] }
+              center={ [latitude, longitude] }
               onClick={ (result) => {
                 this.handleClick({
                   lat: result.lat,
@@ -138,8 +134,7 @@ export default class Map extends Component {
               } }
               options={ () => this.mapOptions }
               onGoogleApiLoaded={ this.handleGoogleMapLoaded }
-              yesIWantToUseGoogleMapApiInternals
-            >
+              yesIWantToUseGoogleMapApiInternals>
               { /* userlocation center */ }
               <Pokeball lat={ userLocation[0] } lng={ userLocation[1] } />
             </GoogleMap>
@@ -150,8 +145,7 @@ export default class Map extends Component {
                 top: 'calc(50vh - (100px / 2) - 60px)',
                 left: 'calc(50vw - (260px / 2))'
               } }
-              className='alert alert-info text-center'
-            >
+              className='alert alert-info text-center'>
               <i
                 style={ { marginBottom: 10 } }
                 className='fa fa-spin fa-2x fa-refresh'
@@ -166,15 +160,13 @@ export default class Map extends Component {
             (
               <div
                 className='btn btn-sm btn-primary'
-                onClick={this.toggleMapDrag}
-              >
+                onClick={ this.toggleMapDrag }>
                 Map Dragging Enabled
               </div>
             ) : (
               <div
                 className='btn btn-sm btn-secondary'
-                onClick={this.toggleMapDrag}
-              >
+                onClick={ this.toggleMapDrag }>
                 Map Dragging Locked
               </div>
             )

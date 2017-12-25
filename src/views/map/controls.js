@@ -22,11 +22,11 @@ const handleMove = action((direction) => {
 
   let newLocation;
   switch (direction) {
-  case 'LEFT': { newLocation = [ userLocation[0], userLocation[1] - move ]; break; }
-  case 'RIGHT': { newLocation = [ userLocation[0], userLocation[1] + move ]; break; }
-  case 'DOWN': { newLocation = [ userLocation[0] - move, userLocation[1] ]; break; }
-  case 'UP': { newLocation = [ userLocation[0] + move, userLocation[1] ]; break; }
-  default: { newLocation = [ userLocation[0], userLocation[1] ]; }
+  case 'LEFT': { newLocation = [userLocation[0], userLocation[1] - move]; break; }
+  case 'RIGHT': { newLocation = [userLocation[0], userLocation[1] + move]; break; }
+  case 'DOWN': { newLocation = [userLocation[0] - move, userLocation[1]]; break; }
+  case 'UP': { newLocation = [userLocation[0] + move, userLocation[1]]; break; }
+  default: { newLocation = [userLocation[0], userLocation[1]]; }
   }
 
   userLocation.replace(newLocation);
@@ -36,13 +36,13 @@ const handleMove = action((direction) => {
   defer(action(() => lastMoveDirection.set(direction)));
 });
 
-let last_escape = 0;
+let lastEscape = 0;
 const handleEscape = after(2, () => {
-  if (Date.now() - last_escape <= 500) {
+  if (Date.now() - lastEscape <= 500) {
     autopilot.stop();
-    last_escape = 0;
+    lastEscape = 0;
   } else {
-    last_escape = Date.now();
+    lastEscape = Date.now();
   }
 });
 
@@ -75,16 +75,16 @@ window.addEventListener('keydown', ({ keyCode }) => {
 });
 
 const Controls = observer(() =>
-	<div className='controls'>
-		{ ['UP', 'DOWN', 'LEFT', 'RIGHT'].map(direction =>
-			<span
-				key={ direction }
-				onClick={ () => handleMove(direction) }
-				className={ cx(
+  <div className='controls'>
+    { ['UP', 'DOWN', 'LEFT', 'RIGHT'].map(direction =>
+      <span
+        key={ direction }
+        onClick={ () => handleMove(direction) }
+        className={ cx(
           `octicon octicon-arrow-${direction.toLowerCase()}`,
           { last: lastMoveDirection.get() === direction }
         ) }
-			/>
+      />
     ) }
   </div>
 );

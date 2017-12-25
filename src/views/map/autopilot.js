@@ -15,25 +15,6 @@ const KEY_SPACE = 32;
 @observer
 export default class Autopilot extends Component {
 
-  @observable travelMode = 'walk'
-  @observable isModalOpen = false
-  @observable travelMode = 'cycling'
-
-  @computed get speed() {
-    const [ , speed ] = autopilot.travelModes.find(([ t ]) => t === this.travelMode);
-    return speed;
-  }
-
-  @computed get travelModeName() {
-    const [ travelModeName ] = autopilot.travelModes.find(([ t ]) => t === this.travelMode);
-    return travelModeName;
-  }
-
-  @computed get travelModeIcon() {
-    const [ , , travelModeIcon ] = autopilot.travelModes.find(([ t ]) => t === this.travelMode);
-    return travelModeIcon;
-  }
-
   componentDidMount() {
     // initialize algolia places input
     this.placesAutocomplete = places({ container: this.placesEl });
@@ -54,6 +35,25 @@ export default class Autopilot extends Component {
     });
   }
 
+  @observable travelMode = 'walk'
+  @observable isModalOpen = false
+  @observable travelMode = 'cycling'
+
+  @computed get speed() {
+    const [, speed] = autopilot.travelModes.find(([t]) => t === this.travelMode);
+    return speed;
+  }
+
+  @computed get travelModeName() {
+    const [travelModeName] = autopilot.travelModes.find(([t]) => t === this.travelMode);
+    return travelModeName;
+  }
+
+  @computed get travelModeIcon() {
+    const [, , travelModeIcon] = autopilot.travelModes.find(([t]) => t === this.travelMode);
+    return travelModeIcon;
+  }
+
   @action handleDestinationRequest = ({ destination: { latlng: { lat, lng } } }) => {
     autopilot.stop();
 
@@ -70,7 +70,6 @@ export default class Autopilot extends Component {
       })
       .catch(() => this.placesAutocomplete.setVal(null));
   }
-
 
   @action handleSuggestionChange = ({ suggestion: { latlng: { lat, lng } } }) => {
     autopilot.scheduleTrip(lat, lng)
@@ -149,15 +148,14 @@ export default class Autopilot extends Component {
           <i className='fa fa-pause' />
         </button>
       );
-    } else {
-      return (
-        <button
-          className='toggle resume btn btn-success'
-          onClick={ autopilot.start }>
-          <i className='fa fa-play' />
-        </button>
-      );
     }
+    return (
+      <button
+        className='toggle resume btn btn-success'
+        onClick={ autopilot.start }>
+        <i className='fa fa-play' />
+      </button>
+    );
   }
 
   render() {
@@ -170,7 +168,8 @@ export default class Autopilot extends Component {
             className='form-control'
             type='search'
             placeholder='Destination'
-            onChange={ this.handleDestinationChange } />
+            onChange={ this.handleDestinationChange }
+          />
         </div>
 
         <div className={ cx('status-container', { hide: autopilot.clean }) }>
@@ -191,7 +190,7 @@ export default class Autopilot extends Component {
 
         <div className={ cx('autopilot-modal', { open: this.isModalOpen }) }>
           <div className='travel-modes row'>
-            { autopilot.travelModes.map(([ name, speed, icon ]) =>
+            { autopilot.travelModes.map(([name, speed, icon]) =>
               <div
                 key={ name }
                 className={ `col-sm-4 text-center ${name}` }
@@ -256,7 +255,6 @@ export default class Autopilot extends Component {
             </div>
           </div>
         </div>
-
       </div>
     );
   }

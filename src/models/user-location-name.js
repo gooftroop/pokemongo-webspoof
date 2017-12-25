@@ -8,10 +8,10 @@ const geocoder = window.require('geocoder');
 const userLocatioName = observable('Unknown');
 
 const reverseLocation = throttle(([lat, lng]) => {
-	if (lat && lng) {
-		geocoder.reverseGeocode(lat, lng, (err, data) => {
-			if (err) {
-				Alert.error(`
+  if (lat && lng) {
+    geocoder.reverseGeocode(lat, lng, (err, data) => {
+      if (err) {
+        Alert.error(`
           <strong>Error while reverse location</strong>
           <div class='stack'>${err}</div>
         `);
@@ -19,8 +19,11 @@ const reverseLocation = throttle(([lat, lng]) => {
         return console.warn(err);
       }
 
-      const { results: [ location ] } = data;
-      if (location) userLocatioName.set(location.formatted_address);
+      const { results: [location] } = data;
+      if (location) {
+        userLocatioName.set(location.formatted_address);
+      }
+      return null;
     });
   }
 }, 5000);

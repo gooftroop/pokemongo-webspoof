@@ -16,7 +16,7 @@
   "rules": {
     "comma-dangle": ["error", "only-multiline"],
     "indent": ["error", 2],
-    "jsx-a11y/no-noninteractive-element-interactions": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
     "jsx-quotes": ["error", "prefer-single"],
     "no-confusing-arrow": ["error", { "allowParens": true }],
     "no-mixed-spaces-and-tabs": "error",

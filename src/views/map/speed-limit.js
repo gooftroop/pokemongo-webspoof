@@ -4,11 +4,11 @@ import cx from 'classnames';
 
 import { speedLimit } from '../../models/settings.js';
 
-const presets = [ [ '6-3', 2 ], [ '3-2', 3 ], [ '2-1', 4 ] ];
+const presets = [['6-3', 2], ['3-2', 3], ['2-1', 4]];
 
 const SpeedLimit = observer(() =>
   <div className='speed-limit btn-group btn-group-sm'>
-    { presets.map(([ limit, coeff ], idx) =>
+    { presets.map(([limit, coeff], idx) =>
       <button
         key={ idx }
         type='button'

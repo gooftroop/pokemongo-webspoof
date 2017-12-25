@@ -18,11 +18,11 @@ class Autopilot {
   @observable destination = { lat: null, lng: null };
 
   @computed get accurateSteps() {
-  	if (this.rawOverviewPath) {
-  		const { steps } = this.calculateIntermediateSteps(this.rawOverviewPath);
-  		return steps;
-  	}
-  	return [];
+    if (this.rawOverviewPath) {
+      const { steps } = this.calculateIntermediateSteps(this.rawOverviewPath);
+      return steps;
+    }
+    return [];
   }
 
   @computed get clean() {
@@ -40,18 +40,17 @@ class Autopilot {
 
     if (hours >= 1) {
       return `${hours}h ${minutes} minutes`;
-    } else {
-      return `${minutes} minutes`;
     }
+    return `${minutes} minutes`;
   }
 
   travelModes = [
-    [ 'walk', 9, 'blind' ],
-    [ 'cycling', 13, 'bicycle' ], // Credit to https://github.com/DJLectr0
-    [ 'bike', 35, 'motorcycle' ], // Credit to https://github.com/DJLectr0
-    [ 'truck', 80, 'truck' ],
-    [ 'car', 120, 'car' ],
-    [ 'teleport', '~', 'star' ]
+    ['walk', 9, 'blind'],
+    ['cycling', 13, 'bicycle'], // Credit to https://github.com/DJLectr0
+    ['bike', 35, 'motorcycle'], // Credit to https://github.com/DJLectr0
+    ['truck', 80, 'truck'],
+    ['car', 120, 'car'],
+    ['teleport', '~', 'star']
   ];
 
   findDirectionPath = (lat, lng) => new Promise((resolve, reject) => {
@@ -70,9 +69,9 @@ class Autopilot {
     // ask google map to find a route
     directionsService.route(directionsRequest, (response, status) => {
       if (status === maps.DirectionsStatus.OK) {
-        const { routes: [ { overview_path } ] } = response;
-        this.rawOverviewPath = overview_path;
-        return resolve(overview_path);
+        const { routes: [{ overviewPath }] } = response;
+        this.rawOverviewPath = overviewPath;
+        return resolve(overviewPath);
       }
 
       this.rawOverviewPath = null;
@@ -80,13 +79,13 @@ class Autopilot {
     });
   })
 
-	calculateIntermediateSteps = foundPath =>
+  calculateIntermediateSteps = foundPath =>
     foundPath.reduce(
       (result, { lat: endLat, lng: endLng }, idx) => {
         if (idx > 0) {
           const { lat: startLat, lng: startLng } = foundPath[idx - 1];
 
-		const pendingDistance = haversine(
+          const pendingDistance = haversine(
             { latitude: startLat(), longitude: startLng() },
             { latitude: endLat(), longitude: endLng() }
           );
@@ -94,7 +93,7 @@ class Autopilot {
           if (isNaN(this.speed)) {
             return {
               distance: result.distance + pendingDistance,
-              steps: [ { lat: endLat(), lng: endLng() } ]
+              steps: [{ lat: endLat(), lng: endLng() }]
             };
           }
 
@@ -119,7 +118,7 @@ class Autopilot {
 
           return {
             distance: result.distance + pendingDistance,
-            steps: [ ...result.steps, ...stepsInBetween ]
+            steps: [...result.steps, ...stepsInBetween]
           };
         }
         return result;
@@ -150,10 +149,10 @@ class Autopilot {
 
     const moveNextPoint = action(() => {
       if (this.steps.length > 0) {
-        const [ { lat: nextLat, lng: nextLng } ] = this.steps;
+        const [{ lat: nextLat, lng: nextLng }] = this.steps;
 
         // move to locaiton
-        userLocation.replace([ nextLat, nextLng ]);
+        userLocation.replace([nextLat, nextLng]);
         // remove first location that we moved to
         this.steps.remove(this.steps[0]);
 
