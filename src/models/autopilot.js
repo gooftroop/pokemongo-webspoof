@@ -69,7 +69,7 @@ class Autopilot {
     // ask google map to find a route
     directionsService.route(directionsRequest, (response, status) => {
       if (status === maps.DirectionsStatus.OK) {
-        const { routes: [{ overviewPath }] } = response;
+        const { routes: [{ overview_path: overviewPath }] } = response;
         this.rawOverviewPath = overviewPath;
         return resolve(overviewPath);
       }

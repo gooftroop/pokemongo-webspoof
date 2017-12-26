@@ -1,7 +1,7 @@
 .autopilot {
   position: absolute;
   width: 350px;
-  top: 10px;
+  top: 50px;
   left: 10px;
   margin-bottom: 8px;
 
@@ -18,7 +18,7 @@
     margin-bottom: 8px;
 
     &.hide {
-      display: none;
+      /* display: none; */
     }
   }
 

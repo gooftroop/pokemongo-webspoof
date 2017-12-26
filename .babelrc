@@ -1,4 +1,11 @@
 {
-  "presets": [ "save" ],
+  "presets": [
+    ["env", {
+      "targets": {
+        "node": "current"
+      }
+    }],
+    "save"
+  ],
   "plugins": [ "typecheck" ]
 }

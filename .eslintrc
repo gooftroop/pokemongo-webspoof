@@ -23,7 +23,10 @@
     "no-multiple-empty-lines": ["error", { "max": 1 }],
     "react/jsx-closing-bracket-location": [
       "error",
-      { "nonEmpty": "after-props", "selfClosing": "tag-aligned" }
+      {
+        "nonEmpty": "tag-aligned",
+        "selfClosing": "tag-aligned"
+      }
     ],
     "react/jsx-curly-spacing": ["error", "always"],
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],

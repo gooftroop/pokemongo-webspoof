@@ -144,7 +144,8 @@ export default class Autopilot extends Component {
       return (
         <button
           className='toggle pause btn btn-warning'
-          onClick={ autopilot.pause }>
+          onClick={ autopilot.pause }
+        >
           <i className='fa fa-pause' />
         </button>
       );
@@ -152,7 +153,8 @@ export default class Autopilot extends Component {
     return (
       <button
         className='toggle resume btn btn-success'
-        onClick={ autopilot.start }>
+        onClick={ autopilot.start }
+      >
         <i className='fa fa-play' />
       </button>
     );
@@ -172,17 +174,19 @@ export default class Autopilot extends Component {
           />
         </div>
 
-        <div className={ cx('status-container', { hide: autopilot.clean }) }>
+        <div className={ cx('status-container') }>
           <button
             className='autopilot-btn btn btn-danger'
             onClick={ autopilot.stop }
-            disabled={ !autopilot.running }>
+            disabled={ !autopilot.running }
+          >
             Stop autopilot
           </button>
           { this.renderTogglePause() }
           <button
             className='edit btn btn-primary'
-            onClick={ this.handleChangeSpeed }>
+            onClick={ this.handleChangeSpeed }
+          >
             <i className={ `fa fa-${this.travelModeIcon}` } />
           </button>
           {/* <Shortcuts onShortcutClick={ this.shortcutClickHandler } /> */}
@@ -194,7 +198,8 @@ export default class Autopilot extends Component {
               <div
                 key={ name }
                 className={ `col-sm-4 text-center ${name}` }
-                onClick={ this.handleSelectTravelMode(name, speed) }>
+                onClick={ this.handleSelectTravelMode(name, speed) }
+              >
                 <div className={ cx('travel-mode', { selected: name === this.travelMode }) }>
                   <div>
                     <div className={ `fa fa-${icon}` } />
@@ -240,7 +245,8 @@ export default class Autopilot extends Component {
               <button
                 type='button'
                 className='btn btn-block btn-sm btn-danger'
-                onClick={ this.handleCancelAutopilot }>
+                onClick={ this.handleCancelAutopilot }
+              >
                 Cancel
               </button>
             </div>
@@ -249,7 +255,8 @@ export default class Autopilot extends Component {
                 type='button'
                 className='btn btn-block btn-sm btn-success'
                 disabled={ autopilot.accurateSteps.length === 0 }
-                onClick={ this.handleStartAutopilot }>
+                onClick={ this.handleStartAutopilot }
+              >
                 { !autopilot.clean ? 'Update' : 'Start' } autopilot!
               </button>
             </div>

@@ -89,13 +89,14 @@ export default class Map extends Component {
   }
 
   @action toggleMapDrag = () => {
-    this.mapOptions.draggable = !this.mapOptions.draggable
-    this.map.map_.setOptions(toJS(this.mapOptions))
+    this.mapOptions.draggable = !this.mapOptions.draggable;
+    this.map.map_.setOptions(toJS(this.mapOptions));
   }
 
-  @action handleClick = ({ lat, lng }, force) => {
-    if (!this.mapOptions.draggable || force) {
-      this.autopilot.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } })
+  @action handleClick = ({ lat, lng, event }) => {
+    const navigate = !!event.shiftKey;
+    if (!this.mapOptions.draggable || navigate) {
+      this.autopilot.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } });
     }
   }
 
@@ -114,7 +115,7 @@ export default class Map extends Component {
               options={ () => this.mapOptions }
               onGoogleApiLoaded={ this.handleGoogleMapLoaded }
               yesIWantToUseGoogleMapApiInternals
-              apiKey={ config.google.maps.apiKey }>
+              bootstrapURLKeys={ { key: config.google.maps.apiKey } }
             >
               { /* userlocation center */ }
               <Pokeball lat={ userLocation[0] } lng={ userLocation[1] } />
@@ -126,7 +127,8 @@ export default class Map extends Component {
                 top: 'calc(50vh - (100px / 2) - 60px)',
                 left: 'calc(50vw - (260px / 2))'
               } }
-              className='alert alert-info text-center'>
+              className='alert alert-info text-center'
+            >
               <i
                 style={ { marginBottom: 10 } }
                 className='fa fa-spin fa-2x fa-refresh'
@@ -141,13 +143,15 @@ export default class Map extends Component {
             (
               <div
                 className='btn btn-sm btn-primary'
-                onClick={ this.toggleMapDrag }>
+                onClick={ this.toggleMapDrag }
+              >
                 Map Dragging Enabled
               </div>
             ) : (
               <div
                 className='btn btn-sm btn-secondary'
-                onClick={ this.toggleMapDrag }>
+                onClick={ this.toggleMapDrag }
+              >
                 Map Dragging Locked
               </div>
             )

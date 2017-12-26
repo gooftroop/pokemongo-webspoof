@@ -108,6 +108,15 @@ const updateXcodeLocation = throttle(([lat, lng]) => {
           return console.warn(stderr);
         }
 
+        if (autoclickErr) {
+          Alert.error(`
+            <strong>Error autoclick Xcode</strong>
+            <div class='stack'>${autoclickErr}</div>
+          `);
+
+          return console.warn(stderr);
+        }
+
         return null;
       });
     }
