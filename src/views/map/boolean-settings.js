@@ -1,24 +1,25 @@
+import cx from 'classnames';
 import React from 'react';
 import { observer } from 'mobx-react';
-import cx from 'classnames';
 
-import { addJitterToMoves, stationaryUpdates, updateXcodeLocation } from '../../models/settings.js';
+import settings from '../../models/settings.js';
 
-const settings = [
-  [addJitterToMoves, 'Add randomness to moves'],
-  [stationaryUpdates, 'Update even when stationary'],
-  [updateXcodeLocation, 'Auto update Xcode location']
+const settingsMap = [
+  ['addJitterToMoves', 'Add randomness to moves'],
+  ['enableMapDragging', 'Enable Map Dragging'],
+  ['stationaryUpdates', 'Update even when stationary'],
+  ['updateXcodeLocation', 'Auto update Xcode location'],
 ];
 
 const BooleanSettings = observer(() =>
   <div className='boolean-settings'>
-    { settings.map(([setting, label], idx) =>
+    { settingsMap.map(([setting, label], idx) =>
       <div
         key={ idx }
-        onClick={ () => setting.set(!setting.get()) }
+        onClick={ () => (settings[setting] = !settings[setting]) }
         className={ cx('btn btn-sm', {
-          'btn-primary': setting.get(),
-          'btn-default': !setting.get()
+          'btn-primary': settings[setting],
+          'btn-default': !settings[setting]
         }) }
       >
         { label }

@@ -7,7 +7,7 @@ const { execSync } = require('child_process');
 const tryCatch = require('./src/try-catch');
 
 const { app, Menu, BrowserWindow } = electron;
-const pathToReactDevTools = `${os.homedir()}/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.5.2_0`;
+const pathToReactDevTools = `${os.homedir()}/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.1.0_0`;
 
 // enable chrome dev-tools when builded
 require('electron-debug')({ enabled: true, showDevTools: true });

@@ -1,6 +1,6 @@
 /* eslint max-len: 0 */
 import { random, throttle } from 'lodash';
-import { observable } from 'mobx';
+import { reaction, observable } from 'mobx';
 import Alert from 'react-s-alert';
 
 import settings from './settings.js';
@@ -77,7 +77,7 @@ const updateXcodeLocation = throttle(([lat, lng]) => {
   // track location changes for total distance & average speed
   stats.pushMove(lat, lng);
 
-  const jitter = settings.addJitterToMoves.get() ? getRandom(0, 0.000006) : 0;
+  const jitter = settings.addJitterToMoves ? getRandom(0, 0.000006) : 0;
 
   const xcodeLocationData =
     `<gpx creator="Xcode" version="1.1"><wpt lat="${(lat + jitter).toFixed(6)}" lon="${(lng + jitter).toFixed(6)}"><name>PokemonLocation</name></wpt></gpx>`;
@@ -95,7 +95,7 @@ const updateXcodeLocation = throttle(([lat, lng]) => {
       return console.warn(error);
     }
 
-    if (settings.updateXcodeLocation.get()) {
+    if (settings.updateXcodeLocation) {
       // reload location into xcode
       const scriptPath = resolve(window.__dirname, 'autoclick.applescript');
       exec(`osascript ${scriptPath}`, (autoclickErr, stdout, stderr) => {
@@ -136,7 +136,7 @@ userLocation.observe(() => updateXcodeLocation(userLocation));
 let currentTimer = null;
 function scheduleUpdate() {
   const randomWait = random(1000, 10000, true);
-  if (!settings.stationaryUpdates.get()) {
+  if (!settings.stationaryUpdates) {
     if (currentTimer) {
       window.clearTimeout(currentTimer);
       currentTimer = null;
@@ -147,7 +147,7 @@ function scheduleUpdate() {
   currentTimer = window.setTimeout(() => {
     currentTimer = null;
 
-    if (!settings.stationaryUpdates.get()) {
+    if (!settings.stationaryUpdates) {
       return;
     }
 
@@ -157,7 +157,9 @@ function scheduleUpdate() {
 }
 
 // watch settings for updates
-settings.stationaryUpdates.observe(() => scheduleUpdate());
+reaction(() => settings.stationaryUpdates, () => {
+  scheduleUpdate();
+});
 
 // initial trigger
 scheduleUpdate();

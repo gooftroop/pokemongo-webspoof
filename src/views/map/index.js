@@ -5,7 +5,7 @@ import axios from 'axios';
 import config from 'config';
 import GoogleMap from 'google-map-react';
 import React, { Component } from 'react';
-import { observable, action, toJS } from 'mobx';
+import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
 
 import settings from '../../models/settings.js';
@@ -24,20 +24,15 @@ import Pokeball from './pokeball.js';
 @observer
 export default class Map extends Component {
 
-  constructor(props, context) {
-    super(props, context);
+  // constructor(props, context) {
+  //   super(props, context);
 
-    this.home = {
-      lat: config.map.home.lat,
-      lng: config.map.home.lng
-    };
-
-    this.mapOptions = {
-      keyboardShortcuts: config.map.keyboardShortcuts,
-      draggable: config.map.draggable,
-      disableDoubleClickZoom: config.map.disableDoubleClickZoom
-    };
-  }
+    // reaction(() => settings.enableMapDragging, (draggable) => {
+    //   debugger
+    //   this.mapOptions.draggable = !draggable;
+    //   this.map.map_.setOptions(toJS(this.mapOptions));
+    // });
+  // }
 
   componentWillMount() {
     // get user geolocation
@@ -55,13 +50,15 @@ export default class Map extends Component {
 
   @observable
   mapOptions = {
-    keyboardShortcuts: false,
-    draggable: true
+    keyboardShortcuts: config.map.keyboardShortcuts,
+    draggable: settings.enableMapDragging,
+    disableDoubleClickZoom: config.map.disableDoubleClickZoom,
   };
 
-  home;
-
-  @observable mapOptions;
+  home = {
+    lat: config.map.home.lat,
+    lng: config.map.home.lng,
+  };
 
   // geolocation API might be down, use http://ipinfo.io
   // source: http://stackoverflow.com/a/32338735
@@ -88,14 +85,9 @@ export default class Map extends Component {
     userLocation.replace([latitude, longitude]);
   }
 
-  @action toggleMapDrag = () => {
-    this.mapOptions.draggable = !this.mapOptions.draggable;
-    this.map.map_.setOptions(toJS(this.mapOptions));
-  }
-
   @action handleClick = ({ lat, lng, event }) => {
     const navigate = !!event.shiftKey;
-    if (!this.mapOptions.draggable || navigate) {
+    if (!settings.enableMapDragging || navigate) {
       this.autopilot.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } });
     }
   }
@@ -109,7 +101,7 @@ export default class Map extends Component {
           (
             <GoogleMap
               ref={ (ref) => { this.map = ref; } }
-              zoom={ settings.zoom.get() }
+              zoom={ settings.zoom }
               center={ [latitude, longitude] }
               onClick={ this.handleClick }
               options={ () => this.mapOptions }
@@ -137,26 +129,6 @@ export default class Map extends Component {
             </div>
           )
         }
-
-        <div className='btn btn-drag-map'>
-          { this.mapOptions.draggable ?
-            (
-              <div
-                className='btn btn-sm btn-primary'
-                onClick={ this.toggleMapDrag }
-              >
-                Map Dragging Enabled
-              </div>
-            ) : (
-              <div
-                className='btn btn-sm btn-secondary'
-                onClick={ this.toggleMapDrag }
-              >
-                Map Dragging Locked
-              </div>
-            )
-          }
-        </div>
         { /* controls, settings displayed on top of the map */ }
         <Autopilot ref={ (ref) => { this.autopilot = ref; } } />
         <Location />

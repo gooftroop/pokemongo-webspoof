@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import cx from 'classnames';
 
-import { speedLimit } from '../../models/settings.js';
+import settings from '../../models/settings.js';
 
 const presets = [['6-3', 2], ['3-2', 3], ['2-1', 4]];
 
@@ -12,10 +12,10 @@ const SpeedLimit = observer(() =>
       <button
         key={ idx }
         type='button'
-        onClick={ () => speedLimit.set(coeff) }
+        onClick={ () => (settings.speedLimit = coeff) }
         className={ cx('btn', {
-          'btn-primary': coeff === speedLimit.get(),
-          'btn-default': coeff !== speedLimit.get()
+          'btn-primary': coeff === settings.speedLimit,
+          'btn-default': coeff !== settings.speedLimit
         }) }
       >
         ~{ limit } meter/step

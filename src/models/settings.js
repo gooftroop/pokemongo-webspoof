@@ -1,9 +1,11 @@
+import config from 'config';
 import { observable } from 'mobx';
 
-export default {
-  updateXcodeLocation: observable(false),
-  addJitterToMoves: observable(true),
-  stationaryUpdates: observable(true),
-  speedLimit: observable(4), // ~40-25 km/h
-  zoom: observable(17) // map zoom
-};
+export default observable({
+  updateXcodeLocation: false,
+  enableMapDragging: config.map.draggable,
+  addJitterToMoves: true,
+  stationaryUpdates: true,
+  speedLimit: 4, // ~40-25 km/h
+  zoom: 17 // map zoom
+});

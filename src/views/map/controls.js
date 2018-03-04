@@ -15,7 +15,7 @@ const lastMoveDirection = observable(null);
 const handleMove = action((direction) => {
   autopilot.pause();
 
-  const speedCoeff = settings.speedLimit.get();
+  const speedCoeff = settings.speedLimit;
   const move = (direction === 'UP' || direction === 'DOWN') ?
     random(0.0000300, 0.000070, true) / speedCoeff :
     random(0.0000700, 0.000070, true) / speedCoeff;
